@@ -1,0 +1,261 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Processing and Grammar Correction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .error {
+            color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .loading {
+            display: none;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Speech Processing and Grammar Correction</h1>
+
+        <!-- Audio Processing Section -->
+        <div class="section">
+            <h2>Process Audio</h2>
+            <form id="audioForm">
+                <div class="form-group">
+                    <label for="audioFile">Upload Audio File:</label>
+                    <input type="file" id="audioFile" accept="audio/*" required>
+                </div>
+                <div class="form-group">
+                    <label for="audioModelName">Model Name (optional):</label>
+                    <input type="text" id="audioModelName" placeholder="mixtral-8x7b-32768">
+                </div>
+                <button type="submit">Process Audio</button>
+                <div class="loading" id="audioLoading">Processing audio...</div>
+                <div class="progress-bar" id="audioProgress">
+                    <div class="progress"></div>
+                </div>
+            </form>
+            <div class="result" id="audioResult"></div>
+        </div>
+
+        <!-- Text Correction Section -->
+        <div class="section">
+            <h2>Correct Text</h2>
+            <form id="textForm">
+                <div class="form-group">
+                    <label for="inputText">Enter Text:</label>
+                    <textarea id="inputText" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="textModelName">Model Name (optional):</label>
+                    <input type="text" id="textModelName" placeholder="mixtral-8x7b-32768">
+                </div>
+                <button type="submit">Correct Text</button>
+                <div class="loading" id="textLoading">Processing text...</div>
+            </form>
+            <div class="result" id="textResult"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioForm = document.getElementById('audioForm');
+            const textForm = document.getElementById('textForm');
+            const audioLoading = document.getElementById('audioLoading');
+            const textLoading = document.getElementById('textLoading');
+            const audioProgress = document.getElementById('audioProgress');
+            const audioResult = document.getElementById('audioResult');
+            const textResult = document.getElementById('textResult');
+
+            // Process Audio Form
+            audioForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                const audioFile = document.getElementById('audioFile').files[0];
+                const modelName = document.getElementById('audioModelName').value;
+
+                formData.append('file', audioFile);
+                if (modelName) {
+                    formData.append('model_name', modelName);
+                }
+
+                try {
+                    audioLoading.style.display = 'block';
+                    audioProgress.style.display = 'block';
+                    audioResult.innerHTML = '';
+
+                    // Simulate progress
+                    let progress = 0;
+                    const progressBar = audioProgress.querySelector('.progress');
+                    const progressInterval = setInterval(() => {
+                        if (progress < 90) {
+                            progress += 10;
+                            progressBar.style.width = `${progress}%`;
+                        }
+                    }, 500);
+
+                    const response = await fetch('/process-audio/', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    clearInterval(progressInterval);
+                    progressBar.style.width = '100%';
+
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        audioResult.innerHTML = `
+                            <h3>Results:</h3>
+                            <p><strong>Transcription:</strong> ${data.transcription}</p>
+                            <p><strong>Corrected Response:</strong> ${data.corrected_response}</p>
+                        `;
+                    } else {
+                        throw new Error(data.error || 'An error occurred');
+                    }
+                } catch (error) {
+                    audioResult.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                } finally {
+                    audioLoading.style.display = 'none';
+                    setTimeout(() => {
+                        audioProgress.style.display = 'none';
+                    }, 500);
+                }
+            });
+
+            // Process Text Form
+            textForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const text = document.getElementById('inputText').value;
+                const modelName = document.getElementById('textModelName').value;
+
+                try {
+                    textLoading.style.display = 'block';
+                    textResult.innerHTML = '';
+
+                    const response = await fetch('/correct-text/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            model_name: modelName || undefined
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        textResult.innerHTML = `
+                            <h3>Corrected Text:</h3>
+                            <p>${data.corrected_response}</p>
+                        `;
+                    } else {
+                        throw new Error(data.error || 'An error occurred');
+                    }
+                } catch (error) {
+                    textResult.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                } finally {
+                    textLoading.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
