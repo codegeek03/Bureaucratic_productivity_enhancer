@@ -18,9 +18,17 @@ llm = ChatGroq(
     max_retries=2,
 )
 
+tool = TavilySearchResults(
+    max_results=5,
+    search_depth="advanced",
+    include_answer=True,
+    include_raw_content=True,
+    include_images=True
+)
+
 class SearchTool(BaseTool):
     name: str = "Search"
-    description: str = "Useful for search-based queries. Use this to find current information about markets, companies, and trends."
+    description: str = "Useful for search-based queries. Use this to find current information about policies, regulatory frameworks, and institutional developments."
     search: TavilySearchResults = Field(
         default_factory=lambda: TavilySearchResults(
             max_results=5,
@@ -40,54 +48,32 @@ class SearchTool(BaseTool):
 
 
 planner = Agent(
-    role="Content Planner",
-    goal="Plan engaging and factually accurate content on {topic}",
-    backstory="You're working on planning a blog article "
-              "about the topic: {topic}."
-              "You collect information that helps the "
-              "audience learn something "
-              "and make informed decisions. "
-              "Your work is the basis for "
-              "the Content Writer to write an article on this topic.",
-    llm = llm,
-    allow_delegation=False,
- verbose=True
-)
-
-writer = Agent(
-    role="Content Writer",
-    goal="Write insightful and factually accurate "
-         "opinion piece about the topic: {topic}",
-    backstory="You're working on a writing "
-              "a new opinion piece about the topic: {topic}. "
-              "You base your writing on the work of "
-              "the Content Planner, who provides an outline "
-              "and relevant context about the topic. "
-              "You follow the main objectives and "
-              "direction of the outline, "
-              "as provide by the Content Planner. "
-              "You also provide objective and impartial insights "
-              "and back them up with information "
-              "provide by the Content Planner. "
-              "You acknowledge in your opinion piece "
-              "when your statements are opinions "
-              "as opposed to objective statements.",
+    role="Policy Speech Planner",
+    goal="Develop a structured and informative speech on {topic} for a formal meeting or conference.",
+    backstory="You are responsible for structuring a speech on {topic} that aligns with institutional objectives and policy frameworks."
+              "Your role is to ensure that the speech effectively conveys key messages to stakeholders,"
+              "includes relevant data, and maintains an authoritative and diplomatic tone.",
     llm=llm,
     allow_delegation=False,
     verbose=True
 )
+
+writer = Agent(
+    role="Speech Writer",
+    goal="Compose a well-structured and impactful speech on {topic}, ensuring clarity, authority, and alignment with institutional messaging.",
+    backstory="Your task is to craft a speech on {topic} that reflects official positions, policy direction, and key strategic considerations."
+              "The speech should be articulate, fact-based, and designed to engage the audience while maintaining formal rigor.",
+    llm=llm,
+    allow_delegation=False,
+    verbose=True
+)
+
 editor = Agent(
-    role="Editor",
-    goal="Edit a given blog post to align with "
-         "the writing style of the organization. ",
-    backstory="You are an editor who receives a blog post "
-              "from the Content Writer. "
-              "Your goal is to review the blog post "
-              "to ensure that it follows journalistic best practices,"
-              "provides balanced viewpoints "
-              "when providing opinions or assertions, "
-              "and also avoids major controversial topics "
-              "or opinions when possible.",
+    role="Speech Editor",
+    goal="Refine the speech to enhance clarity, coherence, and alignment with bureaucratic and institutional standards.",
+    backstory="You are responsible for reviewing the speech to ensure it adheres to formal conventions, maintains neutrality,"
+              "and appropriately balances rhetorical strength with factual accuracy. The speech should reflect professionalism"
+              "and diplomatic finesse while conveying strategic intent effectively.",
     llm=llm,
     allow_delegation=False,
     verbose=True
@@ -95,46 +81,31 @@ editor = Agent(
 
 plan = Task(
     description=(
-        "1. Prioritize the latest trends, key players, "
-            "and noteworthy news on {topic}.\n"
-        "2. Identify the target audience, considering "
-            "their interests and pain points.\n"
-        "3. Develop a detailed content outline including "
-            "an introduction, key points, and a call to action.\n"
-        "4. Include SEO keywords and relevant data or sources."
+        "1. Identify key themes, objectives, and messages relevant to {topic} in a formal setting.\n"
+        "2. Outline key policy considerations, historical context, and institutional perspectives.\n"
+        "3. Develop a structured speech framework, including an introduction, main body, and closing remarks.\n"
+        "4. Ensure the outline includes references to regulatory frameworks, international best practices, or relevant precedents."
     ),
-    expected_output="A comprehensive content plan document "
-        "with an outline, audience analysis, "
-        "SEO keywords, and resources.",
+    expected_output="A structured speech plan document including key themes, objectives, and references to institutional or policy considerations.",
     agent=planner,
 )
 
 write = Task(
     description=(
-        "1. Use the content plan to craft a compelling "
-            "blog post on {topic}.\n"
-        "2. Incorporate SEO keywords naturally.\n"
-  "3. Sections/Subtitles are properly named "
-            "in an engaging manner.\n"
-        "4. Ensure the post is structured with an "
-            "engaging introduction, insightful body, "
-            "and a summarizing conclusion.\n"
-        "5. Proofread for grammatical errors and "
-            "alignment with the brand's voice.\n"
+        "1. Draft a comprehensive and persuasive speech on {topic} based on the provided speech plan.\n"
+        "2. Use formal and diplomatic language, ensuring clarity, coherence, and authority.\n"
+        "3. Incorporate relevant data, statistics, and policy references where applicable.\n"
+        "4. Structure the speech with a strong opening, logical flow, and compelling conclusion.\n"
+        "5. Ensure alignment with institutional messaging, avoiding unnecessary controversy."
     ),
-    expected_output="A well-written blog post "
-        "in markdown format, ready for publication, "
-        "each section should have 2 or 3 paragraphs.",
+    expected_output="A fully written speech document in formal bureaucratic style, ready for delivery at a meeting or conference.",
     agent=writer
 )
 
 edit = Task(
-    description=("Proofread the given blog post for "
-                 "grammatical errors and "
-                 "alignment with the brand's voice."),
-    expected_output="A well-written blog post in markdown format, "
-                    "ready for publication, "
-                    "each section should have 2 or 3 paragraphs.",
+    description=("Refine the speech to ensure grammatical precision, clarity, and alignment with official discourse norms.\n"
+                 "Review for consistency in tone, accuracy in policy references, and overall impact."),
+    expected_output="A polished speech document, refined for clarity, coherence, and professional delivery.",
     agent=editor
 )
 
@@ -145,8 +116,15 @@ def inference(query):
     agents=[planner, writer, editor],
     tasks=[plan, write, edit]
 )
-
-    result = crew.kickoff(inputs={"topic": query})
+    
+    web_research_results = tool.invoke(query)
+    
+    prompt = query + "\n"
+    
+    prompt += web_research_results[0]['content']
+    prompt += "\n"
+    prompt += web_research_results[1]['content']
+    result = crew.kickoff(inputs={"topic": prompt})
 
     return result
 
@@ -154,4 +132,5 @@ def inference(query):
 if __name__ == "__main__":
     query = "Shamik Bhattacharya IIT KGP"
     response = inference(query)
+    
     print(response)
