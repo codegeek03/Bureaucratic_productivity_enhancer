@@ -1,0 +1,4 @@
+groq
+librosa
+gptcache
+langchain-groq
