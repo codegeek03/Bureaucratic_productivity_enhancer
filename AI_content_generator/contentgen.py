@@ -110,7 +110,6 @@ edit = Task(
 )
 
 
-
 def inference(query):
     crew = Crew(
     agents=[planner, writer, editor],
