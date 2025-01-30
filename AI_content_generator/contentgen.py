@@ -18,6 +18,14 @@ llm = ChatGroq(
     max_retries=2,
 )
 
+tool = TavilySearchResults(
+    max_results=5,
+    search_depth="advanced",
+    include_answer=True,
+    include_raw_content=True,
+    include_images=True
+)
+
 class SearchTool(BaseTool):
     name: str = "Search"
     description: str = "Useful for search-based queries. Use this to find current information about policies, regulatory frameworks, and institutional developments."
@@ -107,8 +115,15 @@ def inference(query):
     agents=[planner, writer, editor],
     tasks=[plan, write, edit]
 )
-
-    result = crew.kickoff(inputs={"topic": query})
+    
+    web_research_results = tool.invoke(query)
+    
+    prompt = query + "\n"
+    
+    prompt += web_research_results[0]['content']
+    prompt += "\n"
+    prompt += web_research_results[1]['content']
+    result = crew.kickoff(inputs={"topic": prompt})
 
     return result
 
@@ -116,4 +131,5 @@ def inference(query):
 if __name__ == "__main__":
     query = "Shamik Bhattacharya IIT KGP"
     response = inference(query)
+    
     print(response)
