@@ -4,20 +4,42 @@ from crewai import Agent, Task, Crew
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
+from langchain_community.tools import TavilySearchResults
+from langchain_core.tools import BaseTool
+from pydantic import Field
+
 
 load_dotenv()
 llm = ChatGroq(
-    model="mixtral-8x7b-32768",
+    model="groq/llama3-70b-8192",
     temperature=0,
     max_tokens=None,
     timeout=None,
     max_retries=2,
 )
 
-web_rag_tool=WebsiteSearchTool()
+class SearchTool(BaseTool):
+    name: str = "Search"
+    description: str = "Useful for search-based queries. Use this to find current information about markets, companies, and trends."
+    search: TavilySearchResults = Field(
+        default_factory=lambda: TavilySearchResults(
+            max_results=5,
+            search_depth="advanced",
+            include_answer=True,
+            include_raw_content=True,
+            include_images=True,
+        )
+    )
+
+    def _run(self, query: str) -> str:
+        """Execute the search query using Tavily and return results."""
+        try:
+            return self.search.run(query)
+        except Exception as e:
+            return f"Error performing search: {str(e)}"
+
 
 planner = Agent(
-    llm=llm,
     role="Content Planner",
     goal="Plan engaging and factually accurate content on {topic}",
     backstory="You're working on planning a blog article "
@@ -27,12 +49,12 @@ planner = Agent(
               "and make informed decisions. "
               "Your work is the basis for "
               "the Content Writer to write an article on this topic.",
+    llm = llm,
     allow_delegation=False,
  verbose=True
 )
 
 writer = Agent(
-    llm=llm,
     role="Content Writer",
     goal="Write insightful and factually accurate "
          "opinion piece about the topic: {topic}",
@@ -50,13 +72,12 @@ writer = Agent(
               "You acknowledge in your opinion piece "
               "when your statements are opinions "
               "as opposed to objective statements.",
+    llm=llm,
     allow_delegation=False,
     verbose=True
 )
 editor = Agent(
-    llm=llm,
     role="Editor",
-    tools=[web_rag_tool],
     goal="Edit a given blog post to align with "
          "the writing style of the organization. ",
     backstory="You are an editor who receives a blog post "
@@ -67,6 +88,7 @@ editor = Agent(
               "when providing opinions or assertions, "
               "and also avoids major controversial topics "
               "or opinions when possible.",
+    llm=llm,
     allow_delegation=False,
     verbose=True
 )
@@ -103,8 +125,7 @@ write = Task(
     expected_output="A well-written blog post "
         "in markdown format, ready for publication, "
         "each section should have 2 or 3 paragraphs.",
-    agent=writer,
-    output_file="sampleoutput.md"
+    agent=writer
 )
 
 edit = Task(
@@ -119,12 +140,18 @@ edit = Task(
 
 
 
-crew = Crew(
+def inference(query):
+    crew = Crew(
     agents=[planner, writer, editor],
-    tasks=[plan, write, edit],
-    verbose=2
+    tasks=[plan, write, edit]
 )
 
-result = crew.kickoff(inputs={"topic": "Artificial Intelligence?"})
+    result = crew.kickoff(inputs={"topic": query})
 
-print(result)
+    return result
+
+
+if __name__ == "__main__":
+    query = "Shamik Bhattacharya IIT KGP"
+    response = inference(query)
+    print(response)
