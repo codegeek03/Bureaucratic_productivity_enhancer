@@ -7,20 +7,19 @@ from icecream import ic
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 load_dotenv()
 
-import groq  # Add this import at the top
+import groq  
 client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
 MAX_TOKENS_PER_CHUNK = (
-    1000  # if text is more than this many tokens, we'll break it up into
+    1000  
 )
-# discrete chunks to translate one chunk at a time
 
 
 def get_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    model: str = "llama3-70b-8192",  # Changed default model
+    model: str = "llama3-70b-8192",  
     temperature: float = 0.3,
     json_mode: bool = False,
 ) -> Union[str, dict]:
