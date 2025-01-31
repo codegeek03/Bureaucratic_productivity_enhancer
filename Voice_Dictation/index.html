@@ -5,109 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Recognition App</title>
     <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #121212;
-        color: #ffffff;
-    }
-
-    .container {
-        background-color: #222222;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    h1 {
-        color: #e9bc6b;
-        text-align: center;
-    }
-
-    .controls {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin: 20px 0;
-    }
-
-    button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-        background-color: #e9bc6b;
-        color: #121212;
-    }
-
-    button:hover {
-        background-color: #d4a756;
-    }
-
-    button:disabled {
-        background-color: #444444;
-        color: #666666;
-        cursor: not-allowed;
-    }
-
-    #status {
-        text-align: center;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 4px;
-    }
-
-    #transcriptionArea {
-        width: 100%;
-        min-height: 200px;
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #444444;
-        border-radius: 4px;
-        resize: vertical;
-        background-color: #333333;
-        color: #ffffff;
-    }
-
-    .success {
-        background-color: #2a4a3e;
-        color: #4ade80;
-    }
-
-    .error {
-        background-color: #4a2a2a;
-        color: #ef4444;
-    }
-
-    .warning {
-        background-color: #4a432a;
-        color: #e9bc6b;
-    }
-
-    #downloadSection {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    #downloadLink {
-        color: #e9bc6b;
-        text-decoration: none;
-    }
-
-    #downloadLink:hover {
-        text-decoration: underline;
-        color: #d4a756;
-    }
-
-    /* Add styles for placeholder text */
-    #transcriptionArea::placeholder {
-        color: #666666;
-    }
-</style>
+        /* Reset default margins and ensure full viewport coverage */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+    
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            padding: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+    
+        h1 {
+            text-align: center;
+            color: #e9bc6b;
+            margin-bottom: 2vh;
+            font-size: 2.5rem;
+        }
+    
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 2vh 0;
+            padding: 10px;
+        }
+    
+        .controls button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #e9bc6b;
+            color: #121212;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .controls button:hover {
+            background-color: #d4a756;
+            transform: translateY(-2px);
+        }
+    
+        .controls button:disabled {
+            background-color: #444444;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+        }
+    
+        #status {
+            text-align: center;
+            margin: 2vh 0;
+            padding: 10px;
+            font-size: 1.1rem;
+        }
+    
+        #transcriptionArea {
+            flex-grow: 1;
+            width: 100%;
+            margin: 2vh 0;
+            padding: 20px;
+            border: 2px solid #444444;
+            border-radius: 8px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1.1rem;
+            resize: none;
+            min-height: 60vh;
+        }
+    
+        #downloadSection {
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+        }
+    
+        #downloadLink {
+            color: #e9bc6b;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border: 2px solid #e9bc6b;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+    
+        #downloadLink:hover {
+            background-color: #e9bc6b;
+            color: #121212;
+        }
+    
+        /* Responsive adjustments */
+        @media (max-height: 600px) {
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 1vh;
+            }
+    
+            .controls button {
+                padding: 10px 20px;
+            }
+    
+            #transcriptionArea {
+                min-height: 50vh;
+            }
+        }
+    
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+    
+            .controls button {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    <div class="container">
+        <h1>Speech Recognition App</h1>
+        
+        <div class="controls">
+            <button id="adjustNoiseButton">Adjust for Noise</button>
+            <button id="startButton">Start Recording</button>
+            <button id="stopButton" disabled>Stop Recording</button>
+        </div>
+    
+        <div id="status"></div>
+        
+        <textarea id="transcriptionArea" readonly placeholder="Transcription will appear here..."></textarea>
+        
+        <div id="downloadSection">
+            <a id="downloadLink" style="display: none">Download Transcription</a>
+        </div>
+    </div>
 </head>
 <body>
     <div class="container">

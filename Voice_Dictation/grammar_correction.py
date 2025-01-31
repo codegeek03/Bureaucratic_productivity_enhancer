@@ -1,7 +1,5 @@
 from langchain_groq import ChatGroq
-
 import hashlib
-
 from gptcache import Cache
 from langchain.globals import set_llm_cache
 from gptcache.manager.factory import manager_factory
@@ -14,14 +12,12 @@ load_dotenv()
 def get_hashed_name(name):
     return hashlib.sha256(name.encode()).hexdigest()
 
-
 def init_gptcache(cache_obj: Cache, llm: str):
     hashed_llm = get_hashed_name(llm)
     cache_obj.init(
         pre_embedding_func=get_prompt,
         data_manager=manager_factory(manager="map", data_dir=f"map_cache_{hashed_llm}"),
     )
-
 
 set_llm_cache(GPTCache(init_gptcache))
 
@@ -45,19 +41,18 @@ class ProfessionalResponseGenerator:
 
     def create_professional_template(self):
         """
-        Creates a professional, grammatically correct template for generating responses with Chain-of-Thought (COT) reasoning.
+        Creates a professional, grammatically correct template for generating responses.
         
         Returns:
             str: A string containing the enhanced response template.
         """
         template = """
-        You are a professional assistant with the goal of providing grammatically correct, polished, and professional responses.
+        You are a professional assistant. Your goal is to provide grammatically correct, polished, and professional responses.
 
         Task:
         1. Review the question and correct any grammatical mistakes.
         2. Enhance the professionalism of the query by rephrasing it in a formal tone.
-        3. Use Chain-of-Thought reasoning to break down the question logically. 
-        4.  Your goal is to provide grammatically correct, professional, and clear responses.The response should be to the point and a corrected version of the query text and nothing more than that. dont include any reasoning or  extra texts .
+        3. Provide a clear, concise, and to-the-point response that is a corrected version of the query text. Do not include any reasoning or extra texts.
 
         Question: {question}
 
@@ -77,7 +72,7 @@ class ProfessionalResponseGenerator:
         """
         print("Generating response for query:", query)
         messages = [
-            ("system", "You are a grammar correction and professionalism enhancement assistant. Your goal is to provide grammatically correct, professional, and clear responses.The response should be to the point and a corrected version of the query text and nothing more than that. dont include any reasoning or  extra texts ."),
+            ("system", "You are a grammar correction and professionalism enhancement assistant. Your goal is to provide grammatically correct, professional, and clear responses. The response should be to the point and a corrected version of the query text. Do not include any reasoning or extra texts."),
             ("human", self.prompt.format(question=query))
         ]
         
