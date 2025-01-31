@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Generator</title>
+    <title>AI Speech Generator Pro</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Previous CSS styles remain unchanged until input[type="date"] -->
     <style>
         :root {
             --bg-dark: #121212;
@@ -12,6 +13,8 @@
             --accent: #e9bc6b;
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
+            --error: #ff6b6b;
+            --success: #6bff6b;
         }
 
         body {
@@ -43,6 +46,18 @@
             gap: 20px;
         }
 
+        .user-info {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info i {
+            color: var(--accent);
+        }
+
         h1 {
             margin: 0;
             color: var(--accent);
@@ -62,21 +77,6 @@
             background: var(--accent);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--accent);
-        }
-
-        .theme-toggle {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--accent);
-            color: var(--bg-dark);
         }
 
         .chat-container {
@@ -119,31 +119,31 @@
             background: rgba(233, 188, 107, 0.2);
         }
 
-        .typing-indicator {
-            display: none;
-            padding: 20px;
-        }
-
-        .typing-dots {
+        .speech-type-selector {
             display: flex;
-            gap: 4px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .typing-dot {
-            width: 8px;
-            height: 8px;
+        .speech-type-btn {
+            background: var(--bg-lighter);
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .speech-type-btn:hover {
+            background: rgba(233, 188, 107, 0.1);
+        }
+
+        .speech-type-btn.active {
             background: var(--accent);
-            border-radius: 50%;
-            animation: typing 1s infinite ease-in-out;
-            opacity: 0.6;
-        }
-
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            color: var(--bg-dark);
         }
 
         .input-container {
@@ -179,6 +179,7 @@
         .action-buttons {
             display: flex;
             justify-content: flex-end;
+            gap: 10px;
         }
 
         .send-button {
@@ -200,22 +201,128 @@
             box-shadow: 0 4px 12px rgba(233, 188, 107, 0.3);
         }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .download-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(233, 188, 107, 0.1);
+            border-radius: 8px;
+            display: none;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-lighter);
+        .otp-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
+        .otp-input {
+            padding: 10px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--text-primary);
             border-radius: 4px;
+            width: 150px;
         }
 
-        ::placeholder {
+        .download-btn {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 20px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: typing 1s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--error);
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+        input[type="date"] {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            width: 200px;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        .download-section p {
+            margin-bottom: 15px;
             color: var(--text-secondary);
+        }
+
+        .password-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .private-content-notice {
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -223,16 +330,16 @@
     <div class="container">
         <header class="header">
             <div class="header-title">
-                <h1>AI Speech Generator</h1>
+                <h1>AI Speech Generator Pro</h1>
                 <div class="bot-status">
                     <div class="status-indicator"></div>
                     <span>Ready to Generate</span>
                 </div>
             </div>
-            <div class="controls">
-                {% comment %} <button class="theme-toggle" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button> {% endcomment %}
+            <div class="user-info">
+                <i class="fas fa-user"></i>
+                <span id="userLogin">SRINJOY59</span>
+                <span id="currentTime"></span>
             </div>
         </header>
 
@@ -240,10 +347,13 @@
             <div class="message bot-message">
                 <div class="avatar">AI</div>
                 <div class="message-bubble">
-                    Welcome! I can help you generate professional speeches. 
-                    Just provide a topic or person's name, and I'll create a well-structured speech.
-                    
-                    Example: "Generate a speech about [person/topic]"
+                    Welcome! I can help you generate professional speeches for both private and public settings. 
+                    <br><br>
+                    <strong>Select the type of speech:</strong><br>
+                    🔒 Private: For internal meetings and organization events (Password Protected)<br>
+                    🌐 Public: For conferences and public speaking events
+                    <br><br>
+                    Then, provide your topic or the person's name for the speech.
                 </div>
             </div>
         </div>
@@ -258,6 +368,14 @@
 
         <div class="input-container">
             <div class="input-wrapper">
+                <div class="speech-type-selector">
+                    <button class="speech-type-btn active" data-type="public">
+                        <i class="fas fa-globe"></i> Public Speech
+                    </button>
+                    <button class="speech-type-btn" data-type="private">
+                        <i class="fas fa-lock"></i> Private Speech
+                    </button>
+                </div>
                 <textarea 
                     id="queryInput"
                     class="message-input" 
@@ -271,27 +389,81 @@
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
+                <div class="download-section" id="downloadSection">
+                    <p><i class="fas fa-lock"></i> This content is password protected.</p>
+                    <div class="private-content-notice">
+                        To download this private speech, please verify your identity by entering your date of birth.
+                    </div>
+                    <div class="password-form">
+                        <input 
+                            type="date" 
+                            id="dobInput" 
+                            aria-label="Date of Birth"
+                            max="2024-12-31"
+                        >
+                        <button class="download-btn" onclick="verifyDOBAndDownload()">
+                            <i class="fas fa-download"></i> Download Speech
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="notification" id="notification"></div>
+
     <script>
-        // Theme toggle functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.setAttribute('data-theme', 
-                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
-            );
-            themeToggle.querySelector('i').classList.toggle('fa-sun');
-            themeToggle.querySelector('i').classList.toggle('fa-moon');
+        let currentSpeechType = 'public';
+        let generatedContent = '';
+        const currentUser = 'SRINJOY59';
+        const userDOB = '2004-12-11';
+        
+        function getISTTime() {
+            return new Date().toLocaleString('en-US', {
+                timeZone: 'Asia/Kolkata',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).replace(/(\d+)\/(\d+)\/(\d+),/, '$3-$1-$2');
+        }
+        
+        const currentTimestamp = getISTTime();
+        
+        document.getElementById('currentTime').textContent = currentTimestamp + ' IST';
+        
+        setInterval(() => {
+            document.getElementById('currentTime').textContent = getISTTime() + ' IST';
+        }, 1000);
+        document.getElementById('userLogin').textContent = currentUser;
+
+        document.querySelectorAll('.speech-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.speech-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSpeechType = btn.dataset.type;
+                document.getElementById('downloadSection').style.display = 'none';
+            });
         });
 
-        // Auto-resize textarea
         const textarea = document.getElementById('queryInput');
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
         });
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
 
         function addMessage(content, isUser = false) {
             const chatContainer = document.getElementById('chatContainer');
@@ -319,9 +491,12 @@
             const queryInput = document.getElementById('queryInput');
             const query = queryInput.value.trim();
 
-            if (!query) return;
+            if (!query) {
+                showNotification('Please enter a topic for the speech', 'error');
+                return;
+            }
 
-            addMessage(query, true);
+            addMessage(`[${currentSpeechType.toUpperCase()}] ${query}`, true);
             queryInput.value = '';
             queryInput.style.height = 'auto';
 
@@ -333,30 +508,98 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ query: query })
+                    body: JSON.stringify({ 
+                        query: query,
+                        type: currentSpeechType,
+                        user: currentUser,
+                        timestamp: currentTimestamp
+                    })
                 });
 
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.detail || 'An error occurred');
+                    throw new Error('Failed to generate speech');
                 }
 
                 const result = await response.json();
+                generatedContent = result.data.raw;
                 
                 hideTypingIndicator();
-                addMessage(result.data.raw);
+
+                if (currentSpeechType === 'private') {
+                    addMessage('🔒 This is a private speech. Please verify your identity to download the content.');
+                    document.getElementById('downloadSection').style.display = 'block';
+                } else {
+                    addMessage(generatedContent + `
+                        <div style="margin-top: 10px;">
+                            <button onclick="copyToClipboard()" class="download-btn">
+                                <i class="fas fa-copy"></i> Copy Speech
+                            </button>
+                        </div>
+                    `);
+                }
             } catch (error) {
                 hideTypingIndicator();
-                addMessage(`Error: ${error.message}`);
+                addMessage(`⚠️ Error: ${error.message}`);
+                showNotification('Failed to generate speech', 'error');
             }
         }
 
+        function copyToClipboard() {
+            navigator.clipboard.writeText(generatedContent).then(() => {
+                showNotification('Speech copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy speech', 'error');
+            });
+        }
+
+        async function verifyDOBAndDownload() {
+            const enteredDOB = document.getElementById('dobInput').value;
+            
+            if (!enteredDOB) {
+                showNotification('Please enter your date of birth', 'error');
+                return;
+            }
+
+
+
+            if (enteredDOB === userDOB) {
+                const blob = new Blob([generatedContent], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `private_speech_${currentTimestamp.replace(/[: ]/g, '_')}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                document.getElementById('dobInput').value = '';
+                document.getElementById('downloadSection').style.display = 'none';
+                addMessage('✅ Content downloaded successfully!');
+                showNotification('Speech downloaded successfully!', 'success');
+            } else {
+                addMessage('❌ Incorrect date of birth. Please try again.');
+                showNotification('Invalid date of birth', 'error');
+            }
+        }
+
+        // Handle Enter key press
         document.getElementById('queryInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 submitQuery();
             }
         });
+
+        // Update timestamp every second
+        setInterval(() => {
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').slice(0, 19);
+            document.getElementById('currentTime').textContent = timestamp + ' UTC';
+        }, 1000);
+
+        // Initialize with public speech type selected
+        document.querySelector('.speech-type-btn[data-type="public"]').classList.add('active');
     </script>
 </body>
 </html>
