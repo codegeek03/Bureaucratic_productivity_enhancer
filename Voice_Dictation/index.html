@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition App</title>
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .container {
+        background-color: #222222;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        color: #e9bc6b;
+        text-align: center;
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        background-color: #e9bc6b;
+        color: #121212;
+    }
+
+    button:hover {
+        background-color: #d4a756;
+    }
+
+    button:disabled {
+        background-color: #444444;
+        color: #666666;
+        cursor: not-allowed;
+    }
+
+    #status {
+        text-align: center;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    #transcriptionArea {
+        width: 100%;
+        min-height: 200px;
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #444444;
+        border-radius: 4px;
+        resize: vertical;
+        background-color: #333333;
+        color: #ffffff;
+    }
+
+    .success {
+        background-color: #2a4a3e;
+        color: #4ade80;
+    }
+
+    .error {
+        background-color: #4a2a2a;
+        color: #ef4444;
+    }
+
+    .warning {
+        background-color: #4a432a;
+        color: #e9bc6b;
+    }
+
+    #downloadSection {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #downloadLink {
+        color: #e9bc6b;
+        text-decoration: none;
+    }
+
+    #downloadLink:hover {
+        text-decoration: underline;
+        color: #d4a756;
+    }
+
+    /* Add styles for placeholder text */
+    #transcriptionArea::placeholder {
+        color: #666666;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Speech Recognition App</h1>
+        
+        <div class="controls">
+            <button id="adjustNoiseButton">Adjust for Noise</button>
+            <button id="startButton">Start Recording</button>
+            <button id="stopButton" disabled>Stop Recording</button>
+        </div>
+
+        <div id="status"></div>
+        
+        <textarea id="transcriptionArea" readonly placeholder="Transcription will appear here..."></textarea>
+        
+        <div id="downloadSection">
+            <a id="downloadLink" style="display: none">Download Transcription</a>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const adjustNoiseButton = document.getElementById('adjustNoiseButton');
+        const status = document.getElementById('status');
+        const transcriptionArea = document.getElementById('transcriptionArea');
+        const downloadLink = document.getElementById('downloadLink');
+
+        let isRecording = false;
+
+        function updateStatus(message, type = 'info') {
+            status.textContent = message;
+            status.className = type;
+        }
+
+        function toggleButtons(recording) {
+            startButton.disabled = recording;
+            stopButton.disabled = !recording;
+            adjustNoiseButton.disabled = recording;
+        }
+
+        adjustNoiseButton.addEventListener('click', async () => {
+            try {
+                updateStatus('Adjusting for ambient noise...', 'warning');
+                adjustNoiseButton.disabled = true;
+                
+                const response = await fetch('/adjust-noise', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateStatus('Noise adjustment complete', 'success');
+                } else {
+                    updateStatus(`Error: ${data.detail}`, 'error');
+                }
+            } catch (error) {
+                updateStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                adjustNoiseButton.disabled = false;
+            }
+        });
+
+        startButton.addEventListener('click', async () => {
+            isRecording = true;
+            toggleButtons(true);
+            updateStatus('Recording...', 'warning');
+            
+            try {
+                const response = await fetch('/listen', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    transcriptionArea.value = data.text;
+                    updateStatus('Recording complete', 'success');
+                    
+                    // Update download link
+                    downloadLink.href = `/download/${data.filename}`;
+                    downloadLink.download = data.filename;
+                    downloadLink.textContent = `Download ${data.filename}`;
+                    downloadLink.style.display = 'inline';
+                } else {
+                    updateStatus(`Error: ${data.detail}`, 'error');
+                }
+            } catch (error) {
+                updateStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                isRecording = false;
+                toggleButtons(false);
+            }
+        });
+
+        stopButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/stop-listening', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateStatus('Recording stopped', 'success');
+                } else {
+                    updateStatus(`Error: ${data.detail}`, 'error');
+                }
+            } catch (error) {
+                updateStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                isRecording = false;
+                toggleButtons(false);
+            }
+        });
+
+        // Check server health on page load
+        async function checkHealth() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                if (data.speech_recognition_available) {
+                    updateStatus('Ready to record', 'success');
+                } else {
+                    updateStatus('Speech recognition not available', 'error');
+                    startButton.disabled = true;
+                    stopButton.disabled = true;
+                    adjustNoiseButton.disabled = true;
+                }
+            } catch (error) {
+                updateStatus('Cannot connect to server', 'error');
+                startButton.disabled = true;
+                stopButton.disabled = true;
+                adjustNoiseButton.disabled = true;
+            }
+        }
+
+        checkHealth();
+    </script>
+</body>
+</html>
