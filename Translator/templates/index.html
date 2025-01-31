@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English to Hindi Translation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Base Background Colors */
+            --bg-primary: #121212;        /* Your specified darker background */
+            --bg-secondary: #222222;      /* Your specified lighter background */
+            
+            /* Accent Colors */
+            --accent-primary: #e9bc6b;    /* Your specified main accent color */
+            --accent-secondary: #f8d384;  /* Lighter variation of your accent color */
+            
+            /* Text Colors */
+            --text-primary: #ffffff;      /* Bright white for main text */
+            --text-secondary: #b3b3b3;    /* Softer white for secondary text */
+            
+            /* Status Colors */
+            --success-color: #4caf50;     /* Green that works with dark theme */
+            --error-color: #f44336;       /* Red that works with dark theme */
+            
+            /* UI Elements */
+            --card-bg: rgba(34, 34, 34, 0.7);    /* Based on your lighter background */
+            --border-color: rgba(233, 188, 107, 0.2); /* Subtle border using your accent color */
+            
+            /* Additional Colors for Depth */
+            --hover-bg: #1a1a1a;         /* Slightly lighter than primary for hover states */
+            --active-bg: #2c2c2c;        /* Even lighter for active states */
+            --shadow-color: rgba(0, 0, 0, 0.3); /* For depth and elevation */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .status-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        
+        .language-selector {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .language-select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+        }
+        
+        .swap-button button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .swap-button button:hover {
+            transform: rotate(180deg);
+        }
+        
+        .translation-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        #translateBtn, #clearBtn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #translateBtn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+        
+        #clearBtn {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        #translateBtn:hover, #clearBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--card-bg);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        #translationSteps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .step {
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(129, 140, 248, 0.1));
+            border: 1px solid var(--accent-primary);
+            transform: scale(1.05);
+        }
+        
+        .translation-status {
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .translation-area {
+                grid-template-columns: 1fr;
+            }
+            
+            #translationSteps {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .swap-button {
+                justify-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>English to Hindi Translation</h1>
+            <div class="status-info">
+                <span>User: {{ user }}</span>
+                <span class="timestamp">UTC Time: {{ current_time }}</span>
+            </div>
+            </div><!-- Add this after the header div and before translation-area -->
+            <div class="language-selector">
+                <div class="select-wrapper">
+                    <label for="sourceLang">Source Language:</label>
+                    <select id="sourceLang" class="language-select">
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                    </select>
+                </div>
+                <div class="swap-button">
+                    <button id="swapLanguages" onclick="swapLanguages()">
+                        <span>⇌</span>
+                    </button>
+                </div>
+                <div class="select-wrapper">
+                    <label for="targetLang">Target Language:</label>
+                    <select id="targetLang" class="language-select">
+                        <option value="Hindi">Hindi</option>
+                        <option value="English">English</option>
+                    </select>
+                </div>
+            </div>
+        <!-- Replace your translation-area div with this -->
+<div class="translation-area">
+    <div class="form-group">
+        <label id="sourceLabel" for="sourceText">Source Text:</label>
+        <textarea id="sourceText" placeholder="Enter text here..." required></textarea>
+    </div>
+    <div class="form-group">
+        <label id="targetLabel" for="targetText">Translated Text:</label>
+        <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>
+    </div>
+</div>
+    
+        <div class="progress-bar" id="progressBar">
+            <div class="progress" id="progress"></div>
+        </div>
+    
+        <div id="translationSteps">
+            <div class="step" id="step1">1. Initializing translation...</div>
+            <div class="step" id="step2">2. Processing text...</div>
+            <div class="step" id="step3">3. Generating Hindi translation...</div>
+            <div class="step" id="step4">4. Refining translation...</div>
+            <div class="step" id="step5">5. Finalizing output...</div>
+        </div>
+    
+        <div class="controls">
+            <button id="translateBtn" onclick="translateText()">Translate to Hindi</button>
+            <button id="clearBtn" onclick="clearFields()">Clear All</button>
+        </div>
+    
+        <div id="status" class="translation-status"></div>
+    </div>
+    
+    <script>
+        // Global variables to track current state
+let currentSourceLang = 'English';
+let currentTargetLang = 'Hindi';
+
+function swapLanguages() {
+    const sourceLang = document.getElementById('sourceLang');
+    const targetLang = document.getElementById('targetLang');
+    const sourceText = document.getElementById('sourceText');
+    const targetText = document.getElementById('targetText');
+    
+    // Swap language selections
+    const tempLang = sourceLang.value;
+    sourceLang.value = targetLang.value;
+    targetLang.value = tempLang;
+    
+    // Clear the text areas
+    sourceText.value = '';
+    targetText.value = '';
+    
+    // Update the current language state
+    currentSourceLang = sourceLang.value;
+    currentTargetLang = targetLang.value;
+    
+    // Update interface
+    updateInterface();
+}
+
+function updateInterface() {
+    const sourceLang = document.getElementById('sourceLang').value;
+    const targetLang = document.getElementById('targetLang').value;
+    const sourceText = document.getElementById('sourceText');
+    const targetText = document.getElementById('targetText');
+    const translateBtn = document.getElementById('translateBtn');
+    const sourceLabel = document.getElementById('sourceLabel');
+    const targetLabel = document.getElementById('targetLabel');
+    
+    // Update header text
+    document.querySelector('.header h1').textContent = 
+        `${sourceLang} to ${targetLang} Translation`;
+    
+    if (sourceLang === 'Hindi') {
+        sourceText.placeholder = 'हिंदी पाठ यहाँ लिखें...';
+        targetText.placeholder = 'English translation will appear here...';
+        sourceLabel.textContent = 'हिंदी पाठ (Hindi Text):';
+        targetLabel.textContent = 'English Translation:';
+        translateBtn.textContent = 'Translate to English';
+    } else {
+        sourceText.placeholder = 'Enter English text here...';
+        targetText.placeholder = 'हिंदी अनुवाद यहाँ दिखाई देगा...';
+        sourceLabel.textContent = 'English Text:';
+        targetLabel.textContent = 'हिंदी अनुवाद (Hindi Translation):';
+        translateBtn.textContent = 'Translate to Hindi';
+    }
+    
+    updateTranslationSteps(sourceLang, targetLang);
+}
+
+function updateTranslationSteps(sourceLang, targetLang) {
+    const steps = document.querySelectorAll('.step');
+    steps[0].textContent = '1. Initializing translation...';
+    steps[1].textContent = `2. Processing ${sourceLang} text...`;
+    steps[2].textContent = `3. Generating ${targetLang} translation...`;
+    steps[3].textContent = '4. Refining translation...';
+    steps[4].textContent = '5. Finalizing output...';
+}
+
+async function translateText() {
+    const sourceLang = document.getElementById('sourceLang').value;
+    const targetLang = document.getElementById('targetLang').value;
+    const sourceText = document.getElementById('sourceText').value;
+    const targetTextArea = document.getElementById('targetText');
+    const translateBtn = document.getElementById('translateBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    const steps = document.getElementById('translationSteps');
+
+    if (!sourceText.trim()) {
+        showStatus(`Please enter ${sourceLang} text to translate`, 'error');
+        return;
+    }
+
+    try {
+        translateBtn.disabled = true;
+        progressBar.style.display = 'block';
+        steps.style.display = 'block';
+        showStatus('Translation in progress...', 'info');
+
+        let currentStep = 1;
+        const updateStep = (step) => {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            progress.style.width = `${step * 20}%`;
+        };
+
+        updateStep(1);
+        
+        const response = await fetch('/translate/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                text: sourceText,
+                source_lang: sourceLang,
+                target_lang: targetLang,
+                country: "India"
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail?.message || errorData.detail || 'Translation failed');
+        }
+
+        for(let i = 2; i <= 5; i++) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            updateStep(i);
+        }
+
+        const data = await response.json();
+        targetTextArea.value = data.translated_text;
+        showStatus('Translation completed successfully!', 'success');
+
+    } catch (error) {
+        showStatus(`Error: ${error.message}`, 'error');
+    } finally {
+        translateBtn.disabled = false;
+        setTimeout(() => {
+            progressBar.style.display = 'none';
+            steps.style.display = 'none';
+        }, 2000);
+    }
+}
+
+function showStatus(message, type) {
+    const status = document.getElementById('status');
+    status.textContent = message;
+    status.className = `translation-status ${type}`;
+    status.style.backgroundColor = 
+        type === 'error' ? '#f8d7da' : 
+        type === 'success' ? '#d4edda' : '#e2e3e5';
+    status.style.color = 
+        type === 'error' ? '#721c24' : 
+        type === 'success' ? '#155724' : '#383d41';
+    status.style.display = 'block';
+}
+
+function clearFields() {
+    document.getElementById('sourceText').value = '';
+    document.getElementById('targetText').value = '';
+    document.getElementById('status').textContent = '';
+    document.getElementById('progressBar').style.display = 'none';
+    document.getElementById('translationSteps').style.display = 'none';
+}
+
+// Update UTC time every second
+function updateTimestamp() {
+    const now = new Date();
+    const utcString = now.toISOString().replace('T', ' ').slice(0, 19);
+    document.querySelector('.timestamp').textContent = 'UTC Time: ' + utcString;
+}
+
+// Initialize the interface and set up event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    updateInterface();
+    setInterval(updateTimestamp, 1000);
+    
+    // Set up event listeners
+    document.getElementById('sourceLang').addEventListener('change', updateInterface);
+    document.getElementById('targetLang').addEventListener('change', updateInterface);
+    
+    // Keyboard shortcut
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            translateText();
+        }
+    });
+});
+// Rest of your existing code (showStatus, updateTimestamp, etc.) remains the same
+    </script>
+    <!-- Rest of the HTML remains the same -->
+</body>
+</html>
+
+
+
+
+
+
