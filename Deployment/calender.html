@@ -3,25 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customizable Calendar</title>
+    <title>Dark Theme Calendar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #818cf8;
-            --bg-color: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #e2e8f0;
-            --event-color: #10b981;
-            --holiday-color: #ef4444;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --text-color: #f1f5f9;
-            --border-color: #334155;
-            --event-color: #059669;
-            --holiday-color: #dc2626;
+            --primary-color: #8b6b35;    /* Dark golden brown */
+            --secondary-color: #f4d491;   /* Light golden beige */
+            --bg-color: #0f172a;         /* Dark background */
+            --text-color: #f1f5f9;       /* Light text */
+            --border-color: #334155;     /* Dark border */
+            --event-color: #8b6b35;      /* Dark gold for events */
+            --holiday-color: #f4d491;    /* Light gold for holidays */
         }
 
         * {
@@ -48,6 +40,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #1a2234;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .user-info {
@@ -56,10 +52,21 @@
             align-items: center;
         }
 
+        .user-info i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .datetime-display {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+
         .calendar {
             background-color: var(--bg-color);
             border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
             overflow: hidden;
         }
 
@@ -69,7 +76,7 @@
             align-items: center;
             padding: 1rem;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            color: #222222;
         }
 
         .month-year {
@@ -85,7 +92,7 @@
         .nav-btn {
             background: none;
             border: none;
-            color: white;
+            color: #222222;
             cursor: pointer;
             font-size: 1.25rem;
             padding: 0.5rem;
@@ -121,7 +128,7 @@
         }
 
         .day:hover {
-            background-color: rgba(99, 102, 241, 0.1);
+            background-color: #1a2234;
         }
 
         .day.other-month {
@@ -129,7 +136,7 @@
         }
 
         .day.today {
-            background-color: rgba(99, 102, 241, 0.1);
+            background-color: rgba(139, 107, 53, 0.1);
             font-weight: 600;
         }
 
@@ -187,36 +194,14 @@
         }
 
         .modal-content {
-            background-color: var(--bg-color);
+            background-color: #1a2234;
             padding: 2rem;
             border-radius: 1rem;
             width: 100%;
             max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
-        /* Add to your existing CSS */
-.notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
-    animation: slideIn 0.5s ease-out;
-}
 
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
         .form-group {
             margin-bottom: 1rem;
         }
@@ -224,6 +209,7 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
+            color: var(--text-color);
         }
 
         .form-group input,
@@ -232,7 +218,7 @@
             padding: 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: 0.5rem;
-            background-color: var(--bg-color);
+            background-color: #2a334a;
             color: var(--text-color);
         }
 
@@ -257,12 +243,36 @@
         }
 
         .btn-secondary {
-            background-color: var(--border-color);
+            background-color: #334155;
             color: var(--text-color);
         }
 
         .btn:hover {
             opacity: 0.9;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -295,13 +305,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="user-info">
-            </div>
-            <button class="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>
 
         <div class="calendar">
             <div class="calendar-header">
@@ -360,10 +363,20 @@
             </form>
         </div>
     </div>
+
     <script>
         let currentDate = new Date();
         let events = JSON.parse(localStorage.getItem('calendarEvents')) || {};
-        const userId = '{{ user }}'; // Get from server
+
+        // Initialize with current user
+        const currentUser = 'Mrinmoy-1601';
+        
+        function updateDateTime() {
+            const now = new Date('2025-01-31T02:01:39Z'); // Using the specified date/time
+            document.getElementById('currentDateTime').textContent = 
+                now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+        }
+
         if ("Notification" in window) {
             Notification.requestPermission();
         }
@@ -383,16 +396,12 @@
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
 
-            // Check today's events
             if (events[currentDateStr]) {
                 events[currentDateStr].forEach(event => {
                     if (event.time) {
                         const [eventHour, eventMinute] = event.time.split(':').map(Number);
-                        
-                        // Calculate time difference in minutes
                         const timeDiff = (eventHour - currentHour) * 60 + (eventMinute - currentMinute);
                         
-                        // If event is starting in 5 minutes
                         if (timeDiff === 5) {
                             sendNotification(
                                 "Event Starting Soon",
@@ -400,7 +409,6 @@
                             );
                         }
                         
-                        // If event is starting now
                         if (timeDiff === 0) {
                             sendNotification(
                                 "Event Starting Now",
@@ -412,7 +420,6 @@
             }
         }
 
-
         function renderCalendar() {
             const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
             const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -423,7 +430,6 @@
 
             const days = [];
             
-            // Previous month's days
             for (let i = firstDay.getDay(); i > 0; i--) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, prevLastDay.getDate() - i + 1),
@@ -431,7 +437,6 @@
                 });
             }
 
-            // Current month's days
             for (let i = 1; i <= lastDay.getDate(); i++) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth(), i),
@@ -439,7 +444,6 @@
                 });
             }
 
-            // Next month's days
             for (let i = 1; i <= 42 - days.length; i++) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, i),
@@ -520,7 +524,9 @@
             const event = {
                 title: document.getElementById('eventTitle').value,
                 description: document.getElementById('eventDescription').value,
-                time: time
+                time: time,
+                createdBy: currentUser,
+                createdAt: new Date().toISOString()
             };
 
             if (!events[date]) {
@@ -535,20 +541,14 @@
                 `Event "${event.title}" scheduled for ${date} at ${time}`
             );
 
+            closeModal();
+            renderCalendar();
         });
 
-        // Theme toggle
-        const themeToggle = document.querySelector('.theme-toggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.setAttribute('data-theme', 
-                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
-            );
-            themeToggle.querySelector('i').classList.toggle('fa-sun');
-            themeToggle.querySelector('i').classList.toggle('fa-moon');
-        });
-
-        // Initial render
+        // Initialize
         renderCalendar();
+        updateDateTime();
+        setInterval(checkEvents, 60000); // Check for events every minute
     </script>
 </body>
 </html>
