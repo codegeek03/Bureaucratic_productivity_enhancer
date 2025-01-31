@@ -747,20 +747,35 @@
             .todo-container {
                 flex-direction: column; /* Stack elements vertically */
             }
-   
+        
             .todo-main, .todo-stats {
                 flex: 1;
                 width: 100%;
             }
-   
+        
             .todo-item {
                 padding: 12px;
             }
-   
+        
             .todo-item small {
                 width: 100%;
                 text-align: left;
                 margin: 5px 0;
+            }
+        
+            /* Add this new style for the input section */
+            .todo-input-section div {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+        
+            #todoInput {
+                width: 100%;
+            }
+        
+            button[onclick="addTodo()"] {
+                width: 100%;
             }
         }
    
