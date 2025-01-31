@@ -15,10 +15,12 @@
                     <img src="https://i.postimg.cc/JzBWVhW4/my-avatar.png" alt="avatar" width="80">
                 </figure>
 
+
                 <div class="info-content">
                     <h1 class="name" title="Richard Hanrick">Richard Hanrick</h1>
                     <p class="title">Web Developer</p>
                 </div>
+
 
                 <button class="info-more-btn" data-sidebar-btn>
                     <span>Show Contacts</span>
@@ -26,8 +28,10 @@
                 </button>
             </div>
 
+
             <div class="sidebar-info-more">
                 <div class="separator"></div>
+
 
                 <ul class="contacts-list">
                     <li class="contact-item">
@@ -35,24 +39,32 @@
                             <ion-icon name="mail-outline"></ion-icon>
                         </div>
 
+
                         <div class="contact-info">
                             <p class="contact-title">Email</p>
+
 
                             <a href="mailto:richard@example.com" class="contact-link">richardexample.com</a>
                         </div>
                     </li>
+
 
                     <li class="contact-item">
                         <div class="icon-box">
                             <ion-icon name="phone-portrait-outline"></ion-icon>
                         </div>
 
+
                         <div class="contact-info">
                             <p class="contact-title">Phone</p>
+
 
                             <a href="tel:+12133522795" class="contact-link">+1 (213) 352-2795</a>
                         </div>
                     </li>
+
+
+
 
 
 
@@ -61,15 +73,19 @@
                             <ion-icon name="location-outline"></ion-icon>
                         </div>
 
+
                         <div class="contact-info">
                             <p class="contact-title">Location</p>
+
 
                             <address>Sacramento, California, USA</address>
                         </div>
                     </li>
                 </ul>
 
+
                 <div class="separator"></div>
+
 
                 <ul class="social-list">
                     <li class="social-item"><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
@@ -79,6 +95,7 @@
             </div>
         </aside>
 
+
         <div class="main-content">
             <nav class="navbar">
                 <ul class="navbar-list">
@@ -87,88 +104,83 @@
                     <li class="navbar-item"><a href="http://127.0.0.1:9000/" class="navbar-link" data-nav-link>Voice dictation</a></li>
                     <li class="navbar-item"><a href="\Translator\templates\index.html" class="navbar-link" data-nav-link>Translator</a></li>
                     <li class="navbar-item"><a href=".\calender.html" class="navbar-link" data-nav-link>Calendar</a></li>
-                </ul> 
+                </ul>
             </nav>
-            
+           
+
 
             <article class="about active" data-page="about">
                 <header>
                     <h2 class="h2 article-title">About me</h2>
                 </header>
 
+
                 <section class="about-text">
                     <p>I'm Creative Director and UI/UX Designer from Sydney, Australia, working in web development and print media. I enjoy turning complex problems into simple, beautiful and intuitive designs.</p>
-                    <p>My job is to build your website so that it is functional and user-friendly but at the same time attractive. Moreover, I add personal touch to your product and make sure that is eye-catching and easy to use. My aim is to bring across your message and identity in the most creative way. I created web design for many famous brand companies.</p>
+               </section>
+
+
+                <section class="todo-container" style="display: flex; gap: 2rem; margin-top: 2rem;">
+                    <!-- Left side - Todo Input and List -->
+                    <div class="todo-main" style="flex: 2; background: linear-gradient(145deg, #ffffff, #f5f5f5); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div class="todo-input-section" style="margin-bottom: 25px;">
+                            <h3 class="h3 service-title" style="margin-bottom: 20px; color: #2c3e50; font-size: 1.5rem;">📝 My Tasks</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="todoInput" placeholder="What needs to be done?"
+                                       style="flex: 1; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 14px; transition: all 0.3s ease; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                                <button onclick="addTodo()"
+                                        style="padding: 12px 25px; background: linear-gradient(145deg, #6366f1, #4f46e5); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);">
+                                    Add Task
+                                </button>
+                            </div>
+                        </div>
+           
+                        <ul id="todoList" style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                            <!-- Todo items will be added here dynamically -->
+                        </ul>
+                    </div>
+           
+                    <!-- Right side - Todo Statistics -->
+                    <div class="todo-stats" style="flex: 1;">
+                        <div style="background: linear-gradient(145deg, #ffffff, #f5f5f5); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                            <h3 class="h3 service-title" style="margin-bottom: 20px; color: #2c3e50; font-size: 1.5rem;">📊 Overview</h3>
+                            <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #e0e0e0; transition: transform 0.2s ease;">
+                                <h4 style="margin: 0 0 10px 0; color: #4b5563; font-size: 1rem;">Total Tasks</h4>
+                                <p id="totalTasks" style="font-size: 2rem; font-weight: bold; color: #6366f1; margin: 0;">0</p>
+                            </div>
+                            <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #e0e0e0; transition: transform 0.2s ease;">
+                                <h4 style="margin: 0 0 10px 0; color: #4b5563; font-size: 1rem;">Completed</h4>
+                                <p id="completedTasks" style="font-size: 2rem; font-weight: bold; color: #10b981; margin: 0;">0</p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-                <section class="service">
-                    <h3 class="h3 service-title">What I'm doing</h3>
 
-                    <ul class="service-list">
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/4389jZkP/icon-design.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Web Design</h4>
-                                <p class="service-item-text">The most modern and high-quality design made at a professional level.</p>
-                            </div>
-                        </li>
-
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/ZqgqrqzG/icon-dev.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Web development</h4>
-                                <p class="service-item-text">High-quality development of sites at the professional level.</p>
-                            </div>
-                        </li>
-
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/xjLdzYxZ/icon-app.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Mobile apps</h4>
-                                <p class="service-item-text">Professional development of applications for iOS and Android.</p>
-                            </div>
-                        </li>
-
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/0NL8zHpx/icon-photo.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Photography</h4>
-                                <p class="service-item-text">I make high-quality photos of any category at a professional level.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </section>
 
 
                 <div class="modal-container " data-modal-container>
                     <div class="overlay " data-overlay></div>
 
+
                     <section class="testimonials-modal">
                         <button class="modal-close-btn" data-modal-close-btn><ion-icon name="close-outline"></ion-icon></button>
+
 
                         <div class="modal-img-wrapper">
                             <figure class="modal-avatar-box">
                                 <img src="https://i.postimg.cc/zGDHfn3G/avatar-1.png" alt="Daniel Lewis" width="80" data-modal-img>
                             </figure>
 
+
                             <img src="https://i.postimg.cc/mZ00RwX7/icon-quote.png" alt="quote icon">
                         </div>
+
 
                         <div class="modal-content">
                             <h4 class="h3 modal-title" data-modal-title>Daniel Lewis</h4>
                             <time datetime="2023-06-14">14 June, 2023</time>
+
 
                             <div class="modal-text" data-modal-text>
                                 <p>Richard was hired to create a corporate identity. It's modern, clean and with a beautiful design that got a lot of praises from colleagues and visitors. We were very pleased with the work done. He has a lot of experience and is very concerned about the needs of client.</p>
@@ -178,19 +190,24 @@
                 </div>
 
 
+
+
             </article>
-            
+           
             <article class="speech " data-page="speech">
                 <header>
                     <h2 class="h2 article-title">Speech</h2>
                 </header>
 
+
                 <section class="timeline">
                     <div class="title-wrapper">
                         <div class="icon-box"><ion-icon name="book-outline"></ion-icon></div>
 
+
                         <h3 class="h3">Upcoming Lectures</h3>
                     </div>
+
 
                     <ol class="timeline-list">
                         <li class="timeline-item">
@@ -199,11 +216,13 @@
                             <p class="timeline-text">Data Analytics and Machine Learning (ML) are essential tools for extracting insights from data. Analytics focuses on identifying trends, while ML builds predictive models. Key steps include data collection, cleaning, and analysis. ML algorithms can be supervised, unsupervised, or reinforcement-based. Applications span healthcare, finance, and retail. The future lies in leveraging these technologies for smarter decisions.</p>
                         </li>
 
+
                         <li class="timeline-item">
                             <h4 class="h4 timeline-item-title">IIT Patna</h4>
                             <span>09-02-2025</span>
                             <p class="timeline-text">Data Analytics helps in understanding past trends, whereas Machine Learning predicts future outcomes using data. It involves data collection, cleaning, and pattern identification. ML models, including supervised and unsupervised learning, enable automation and efficiency. Industries like healthcare and finance benefit greatly, making data-driven decisions a key competitive advantage.</p>
                         </li>
+
 
                         <li class="timeline-item">
                             <h4 class="h4 timeline-item-title">IIT Delhi</h4>
@@ -213,12 +232,15 @@
                     </ol>
                 </section>
 
+
                 <section class="timeline">
                     <div class="title-wrapper">
                         <div class="icon-box"><ion-icon name="book-outline"></ion-icon></div>
 
+
                         <h3 class="h3">Previous Lectures</h3>
                     </div>
+
 
                     <ol class="timeline-list">
                         <li class="timeline-item">
@@ -227,11 +249,13 @@
                             <p class="timeline-text">Data Analytics interprets patterns in information, while Machine Learning builds predictive models. It involves collecting, cleaning, and analyzing data. ML techniques such as classification, clustering, and deep learning are used across industries like retail and finance. The power of these technologies is shaping the future of automation and decision-making.</p>
                         </li>
 
+
                         <li class="timeline-item">
                             <h4 class="h4 timeline-item-title">IIT Guwahati</h4>
                             <span>22-01-2025</span>
                             <p class="timeline-text">Businesses rely on Data Analytics to make informed decisions, while Machine Learning allows systems to improve automatically based on experience. ML can be supervised, unsupervised, or reinforcement-based, each applied in different domains like security, healthcare, and finance. Mastering these skills is crucial for modern problem-solving.</p>
                         </li>
+
 
                         <li class="timeline-item">
                             <h4 class="h4 timeline-item-title">IIT Bombay</h4>
@@ -241,12 +265,15 @@
                     </ol>
                 </section>
 
+
             </article>
+
 
             <article class="notes " data-page="notes">
                 <header>
                     <h2 class="h2 article-title">Notes</h2>
                 </header>
+
 
                 <section class="projects">
                     <ul class="filter-list">
@@ -256,14 +283,17 @@
                         <li class="filter-item"><button data-filter-btn>Web Development</button></li>
                     </ul>
 
+
                     <div class="filter-select-box">
                         <button class="filter-select " data-select>
                             <div class="select-value" data-select-value>Select Category</div>
+
 
                             <div class="select-icon">
                                 <ion-icon name="chevron-down"></ion-icon>
                             </div>
                         </button>
+
 
                         <ul class="select-list">
                             <li class="select-item"><button data-select-item>All</button></li>
@@ -273,6 +303,7 @@
                         </ul>
                     </div>
 
+
                     <ul class="project-list">
                         <li class="project-item active" data-filter-item data-category="web development">
                             <a href="#">
@@ -281,14 +312,17 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/qRHpHMyd/project-1.jpg" alt="finance" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Finance</h3>
                                 <p class="project-category">Web Development</p>
                             </a>
                         </li>
 
+
                         <li class="project-item active" data-filter-item data-category="web development">
                             <a href="#">
                                 <figure class="project-img">
@@ -296,14 +330,17 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/bNrcM2Wt/project-2.png" alt="orizon" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Orizon</h3>
                                 <p class="project-category">Web Development</p>
                             </a>
                         </li>
 
+
                         <li class="project-item active" data-filter-item data-category="web design">
                             <a href="#">
                                 <figure class="project-img">
@@ -311,14 +348,17 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/jSJVqYsq/project-3.jpg" alt="fundo" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Fundo</h3>
                                 <p class="project-category">Web Design</p>
                             </a>
                         </li>
 
+
                         <li class="project-item active" data-filter-item data-category="applications">
                             <a href="#">
                                 <figure class="project-img">
@@ -326,14 +366,17 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/dtpXxNGb/project-4.png" alt="brawlhalla" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Brawlhalla</h3>
                                 <p class="project-category">Applications</p>
                             </a>
                         </li>
 
+
                         <li class="project-item active" data-filter-item data-category="web design">
                             <a href="#">
                                 <figure class="project-img">
@@ -341,14 +384,17 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/43T0JKLw/project-5.png" alt="dsm." loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">DSM.</h3>
                                 <p class="project-category">Web Design</p>
                             </a>
                         </li>
 
+
                         <li class="project-item active" data-filter-item data-category="web design">
                             <a href="#">
                                 <figure class="project-img">
@@ -356,13 +402,16 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/qR1DX1kZ/project-6.png" alt="metaspark" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Metaspark</h3>
                                 <p class="project-category">Web Design</p>
                             </a>
                         </li>
+
 
                         <li class="project-item active" data-filter-item data-category="web development">
                             <a href="#">
@@ -371,13 +420,16 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/Kj4q9tjc/project-7.png" alt="summary" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Summary</h3>
                                 <p class="project-category">Web Development</p>
                             </a>
                         </li>
+
 
                         <li class="project-item active" data-filter-item data-category="applications">
                             <a href="#">
@@ -386,13 +438,16 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/rw2j4B1w/project-8.jpg" alt="task manager" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Task Manager</h3>
                                 <p class="project-category">Applications</p>
                             </a>
                         </li>
+
 
                         <li class="project-item active" data-filter-item data-category="web development">
                             <a href="#">
@@ -401,8 +456,10 @@
                                         <ion-icon name="eye-outline"></ion-icon>
                                     </div>
 
+
                                     <img src="https://i.postimg.cc/7LxNsSQv/project-9.png" alt="arrival" loading="lazy">
                                 </figure>
+
 
                                 <h3 class="project-title">Arrival</h3>
                                 <p class="project-category">Web Development</p>
@@ -412,10 +469,12 @@
                 </section>
             </article>
 
+
             <article class="blog " data-page="blog">
                 <header>
                     <h2 class="h2 article-title">Blog</h2>
                 </header>
+
 
                 <section class="blog-posts">
                     <ul class="blog-posts-list">
@@ -425,6 +484,7 @@
                                         <img src="https://i.postimg.cc/DysCZrWs/blog-1.jpg" alt="Design conferences in 2024" loading="lazy">
                                     </figure>
 
+
                                 <div class="blog-content">
                                     <div class="blog-meta">
                                         <p class="blog-category">Design</p>
@@ -432,17 +492,21 @@
                                         <time datetime="2024-02-23">Feb 23, 2024</time>
                                     </div>
 
+
                                     <h3 class="h3 blog-item-title">Design conferences in 2024</h3>
                                     <p class="blog-text">In 2024, several exciting design conferences are set to take place, offering opportunities for professionals and enthusiasts to connect, learn, and share innovative ideas.</p>
                                 </div>
                             </a>
                         </li>
 
+
                         <li class="blog-post-item">
                             <a href="#">
                                 <figure class="blog-banner-box">
                                     <img src="https://i.postimg.cc/QC7qFDMs/blog-2.jpg" alt="Best fonts every designer" loading="lazy">
                                 </figure>
+
+
 
 
                                 <div class="blog-content">
@@ -452,17 +516,20 @@
                                         <time datetime="2024-01-29">Jan 29, 2024</time>
                                     </div>
 
+
                                     <h3 class="h3 blog-item-title">Best fonts every designer</h3>
                                     <p class="blog-text">When it comes to typography, choosing the right font is essential for effective design. In this article, I'll bring a brief overview of some of the best fonts that every designer should consider incorporating into their toolkit.</p>
                                 </div>
                             </a>
                         </li>
 
+
                         <li class="blog-post-item">
                             <a href="#">
                                 <figure class="blog-banner-box">
                                     <img src="https://i.postimg.cc/W1T71QcL/blog-3.jpg" alt="Design digest #80" loading="lazy">
                                 </figure>
+
 
                                 <div class="blog-content">
                                     <div class="blog-meta">
@@ -471,17 +538,20 @@
                                         <time datetime="2023-12-20">Dec 20, 2023</time>
                                     </div>
 
+
                                     <h3 class="h3 blog-item-title">Design digest #80</h3>
                                     <p class="blog-text">Hello, my friends. In this Design Digest, I'll show you a curated collection of the latest trends, insights, and innovations in the design world. This edition highlights key themes and discussions that are shaping the future of design.</p>
                                 </div>
                             </a>
                         </li>
 
+
                         <li class="blog-post-item">
                             <a href="#">
                                 <figure class="blog-banner-box">
                                     <img src="https://i.postimg.cc/2S0n8yxh/blog-4.jpg" alt="2023 UI interactions" loading="lazy">
                                 </figure>
+
 
                                 <div class="blog-content">
                                     <div class="blog-meta">
@@ -490,17 +560,20 @@
                                         <time datetime="2023-11-29">Nov 29, 2023</time>
                                     </div>
 
+
                                     <h3 class="h3 blog-item-title">2023 UI interactions</h3>
                                     <p class="blog-text">As we move into 2024, 2023 was marked by the rapidly evolution of the landscape of UI interactions, driven by advancements in technology and user expectations. Dive with me in this text to see the main areas changed in this year.</p>
                                 </div>
                             </a>
                         </li>
 
+
                         <li class="blog-post-item">
                             <a href="#">
                                 <figure class="blog-banner-box">
                                     <img src="https://i.postimg.cc/YCCmVkw9/blog-5.jpg" alt="The forgotten art of spacing" loading="lazy">
                                 </figure>
+
 
                                 <div class="blog-content">
                                     <div class="blog-meta">
@@ -509,11 +582,13 @@
                                         <time datetime="2023-11-12">Nov 12, 2023</time>
                                     </div>
 
+
                                     <h3 class="h3 blog-item-title">The forgotten art of spacing</h3>
                                     <p class="blog-text">In the realm of design, spacing is often an overlooked yet crucial element that can significantly impact the overall aesthetic and functionality of a composition. This post will emphasize the importance of white space, margins, and padding in creating visually appealing and effective designs.</p>
                                 </div>
                             </a>
                         </li>
+
 
                         <li class="blog-post-item">
                             <a href="#">
@@ -521,12 +596,14 @@
                                     <img src="https://i.postimg.cc/zBCBvP16/blog-6.jpg" alt="Design digest #79" loading="lazy">
                                 </figure>
 
+
                                 <div class="blog-content">
                                     <div class="blog-meta">
                                         <p class="blog-category">Design</p>
                                         <span class="dot"></span>
                                         <time datetime="2023-10-20">Oct 20, 2023</time>
                                     </div>
+
 
                                     <h3 class="h3 blog-item-title">Design digest #79</h3>
                                     <p class="blog-text">Hi, my friends. In this Design Digest I'll focus in the tools and resources that we use daily in our projects. Also, I'll include examples of software recommendations, online courses, and design communities that foster collaboration and learning.</p>
@@ -537,10 +614,12 @@
                 </section>
             </article>
 
+
             <article class="contact " data-page="contact">
                 <header>
                     <h2 class="h2 article-title">Contact</h2>
                 </header>
+
 
                 <section class="mapbox" data-mapbox>
                     <figure>
@@ -549,8 +628,10 @@
                     </figure>
                 </section>
 
+
                 <section class="contact-form">
                     <h3 class="h3 form-title">Contact Form</h3>
+
 
                     <form action="#" class="form" data-form>
                         <div class="input-wrapper">
@@ -558,7 +639,9 @@
                             <input type="email" name="email" class="form-input" placeholder="Email Address" required data-form-input>
                         </div>
 
+
                         <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input=""></textarea>
+
 
                         <button class="form-btn" type="submit" disabled data-form-btn>
                             <ion-icon name="paper-plane"></ion-icon>
@@ -570,9 +653,350 @@
         </div>
     </main>
 
+
+    <style>
+        [data-page] {
+            display: none;
+        }
+       
+        [data-page].active {
+            display: block;
+        }
+   
+        /* Main container responsiveness */
+        .todo-container {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-direction: row; /* Default for desktop */
+            padding: 1rem;
+        }
+   
+        /* Main todo section */
+        .todo-main {
+            flex: 2;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-width: 0; /* Prevent flex item overflow */
+        }
+   
+        /* Todo input section */
+        .todo-input-section {
+            margin-bottom: 1.5rem;
+        }
+   
+        .todo-input-wrapper {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+   
+        #todoInput {
+            flex: 1;
+            min-width: 200px; /* Minimum width for input */
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+   
+        /* Add Task button */
+        .add-task-btn {
+            padding: 12px 25px;
+            background: linear-gradient(145deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+            white-space: nowrap;
+        }
+   
+        /* Stats section */
+        .todo-stats {
+            flex: 1;
+            min-width: 250px; /* Minimum width for stats section */
+        }
+   
+        /* Todo items */
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+   
+        .todo-item span {
+            flex: 1;
+            min-width: 150px;
+            word-break: break-word;
+        }
+   
+        /* Responsive breakpoints */
+        @media screen and (max-width: 768px) {
+            .todo-container {
+                flex-direction: column; /* Stack elements vertically */
+            }
+   
+            .todo-main, .todo-stats {
+                flex: 1;
+                width: 100%;
+            }
+   
+            .todo-item {
+                padding: 12px;
+            }
+   
+            .todo-item small {
+                width: 100%;
+                text-align: left;
+                margin: 5px 0;
+            }
+        }
+   
+        @media screen and (max-width: 480px) {
+            .todo-input-wrapper {
+                flex-direction: column;
+            }
+   
+            .add-task-btn {
+                width: 100%;
+            }
+   
+            #todoInput {
+                width: 100%;
+            }
+   
+            .todo-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+   
+            .delete-btn {
+                align-self: flex-end;
+                opacity: 1; /* Always show delete button on mobile */
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+       
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+       
+        .todo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+       
+        .todo-item.completed {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+       
+        .todo-item input[type="checkbox"] {
+            margin-right: 15px;
+            width: 18px;
+            height: 18px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+       
+        .todo-item span {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+       
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+       
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+       
+        .todo-item:hover .delete-btn {
+            opacity: 1;
+        }
+       
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+       
+        #todoInput:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+       
+        button[onclick="addTodo()"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(99, 102, 241, 0.3);
+        }
+       
+        /* Custom scrollbar */
+        #todoList::-webkit-scrollbar {
+            width: 8px;
+        }
+       
+        #todoList::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+       
+        #todoList::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+       
+        #todoList::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+       
+        .todo-stats > div:hover {
+            transform: translateY(-2px);
+        }
+        </style>
+
+
+
+
     <script src="temp.js"></script>
+    <script>
+        // Initialize todos array in localStorage if it doesn't exist
+        if (!localStorage.getItem('todos')) {
+            localStorage.setItem('todos', JSON.stringify([]));
+        }
+       
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+           
+            if (text) {
+                const todos = JSON.parse(localStorage.getItem('todos'));
+                todos.push({
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('todos', JSON.stringify(todos));
+                input.value = '';
+                renderTodos();
+            }
+        }
+       
+        function toggleTodo(id) {
+            const todos = JSON.parse(localStorage.getItem('todos'));
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                localStorage.setItem('todos', JSON.stringify(todos));
+                renderTodos();
+            }
+        }
+       
+        function deleteTodo(id) {
+            const todos = JSON.parse(localStorage.getItem('todos'));
+            const filteredTodos = todos.filter(t => t.id !== id);
+            localStorage.setItem('todos', JSON.stringify(filteredTodos));
+            renderTodos();
+        }
+       
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+       
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            const todos = JSON.parse(localStorage.getItem('todos'));
+           
+            todoList.innerHTML = todos.map(todo => `
+        <li class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" ${todo.completed ? 'checked' : ''}
+                       onchange="toggleTodo(${todo.id})">
+                <span>${todo.text}</span>
+            </div>
+            <small style="color: #94a3b8;">${formatDate(todo.timestamp)}</small>
+            <button class="delete-btn" onclick="deleteTodo(${todo.id})">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+            </button>
+        </li>
+    `).join('');
+       
+            // Update statistics with animation
+            const totalTasks = document.getElementById('totalTasks');
+            const completedTasks = document.getElementById('completedTasks');
+           
+            totalTasks.style.transition = 'all 0.3s ease';
+            completedTasks.style.transition = 'all 0.3s ease';
+           
+            totalTasks.textContent = todos.length;
+            completedTasks.textContent = todos.filter(t => t.completed).length;
+        }
+       
+        // Add enter key support
+        document.getElementById('todoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+       
+        // Initial render
+        renderTodos();
+        </script>
+
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
+
