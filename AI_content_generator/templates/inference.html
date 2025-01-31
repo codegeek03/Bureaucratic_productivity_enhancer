@@ -3,88 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inference System</title>
+    <title>Speech Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
-    <style>
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .user-info {
-            background-color: #f5f5f5;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .input-section {
-            margin: 20px 0;
-        }
-        .query-input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        .submit-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .result-section {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-height: 100px;
-            white-space: pre-wrap;  /* This preserves formatting */
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <div class="user-info">
-            <p>Current User: {{ user }}</p>
-            <p>Current Time (UTC): {{ current_time }}</p>
+        <header class="header">
+            <div class="header-title">
+                <h1>AI Speech Generator</h1>
+                <div class="bot-status">
+                    <div class="status-indicator"></div>
+                    <span>Ready to Generate</span>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-container" id="chatContainer">
+            <!-- Initial message from bot -->
+            <div class="message bot-message">
+                <div class="avatar">AI</div>
+                <div class="message-bubble">
+                    Welcome! I can help you generate professional speeches. 
+                    Just provide a topic or person's name, and I'll create a well-structured speech.
+                    
+                    Example: "Generate a speech about [person/topic]"
+                </div>
+            </div>
         </div>
 
-        <h1>Inference System</h1>
-        
-        <div class="input-section">
-            <label for="queryInput">Enter your query:</label>
-            <textarea 
-                id="queryInput" 
-                class="query-input" 
-                rows="4" 
-                placeholder="Type your query here..."
-            ></textarea>
-            <button onclick="submitQuery()" class="submit-button">Generate Response</button>
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
         </div>
 
-        <div class="result-section">
-            <h3>Result:</h3>
-            <div id="output">Results will appear here...</div>
+        <div class="input-container">
+            <div class="input-wrapper">
+                <textarea 
+                    id="queryInput"
+                    class="message-input" 
+                    placeholder="Enter topic or person's name for speech generation..." 
+                    rows="1"
+                    aria-label="Speech topic input"
+                ></textarea>
+                <div class="action-buttons">
+                    <button class="send-button" onclick="submitQuery()">
+                        <span>Generate Speech</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.setAttribute('data-theme', 
+                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+            themeToggle.querySelector('i').classList.toggle('fa-sun');
+            themeToggle.querySelector('i').classList.toggle('fa-moon');
+        });
+
+        // Auto-resize textarea
+        const textarea = document.getElementById('queryInput');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        function addMessage(content, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="avatar">${isUser ? 'You' : 'AI'}</div>
+                <div class="message-bubble">${content}</div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'block';
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
         async function submitQuery() {
             const queryInput = document.getElementById('queryInput');
-            const outputDiv = document.getElementById('output');
             const query = queryInput.value.trim();
 
-            if (!query) {
-                outputDiv.innerHTML = "Please enter a query";
-                return;
-            }
+            if (!query) return;
+
+            // Add user message
+            addMessage(query, true);
+            queryInput.value = '';
+            queryInput.style.height = 'auto';
+
+            // Show typing indicator
+            showTypingIndicator();
 
             try {
-                outputDiv.innerHTML = "Processing...";
-                
                 const response = await fetch('/inference', {
                     method: 'POST',
                     headers: {
@@ -99,11 +133,22 @@
                 }
 
                 const result = await response.json();
-                outputDiv.textContent = result.data.raw;
+                
+                // Hide typing indicator and add bot response
+                hideTypingIndicator();
+                addMessage(result.data.raw);
             } catch (error) {
-                outputDiv.innerHTML = `Error: ${error.message}`;
+                hideTypingIndicator();
+                addMessage(`Error: ${error.message}`);
             }
         }
+
+        document.getElementById('queryInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitQuery();
+            }
+        });
     </script>
 </body>
 </html>

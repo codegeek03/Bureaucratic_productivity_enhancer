@@ -9,7 +9,6 @@ import pytz
 
 app = FastAPI()
 
-# Mount static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
