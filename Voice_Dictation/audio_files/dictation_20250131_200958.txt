@@ -1,0 +1,3 @@
+- Corrected version: "Hello, I am a misbehaving individual."
+- Professional enhancement: The greeting is informal and the self-description is not professional. A more formal greeting and a professional description are needed.
+- Chain-of-Thought reasoning: The original greeting is informal and does not convey a professional tone. The self-description is not appropriate for a professional setting. A more formal greeting and a professional self-description are necessary.

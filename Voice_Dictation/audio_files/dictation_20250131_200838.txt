@@ -1,0 +1,2 @@
+- Corrected version: "Hello, my name is Bhattacharjee. I am an alumnus of IIT KGP."
+- The response is formal and clear, mentioning the individual's name and their educational background.
