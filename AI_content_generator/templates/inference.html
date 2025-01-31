@@ -5,7 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Generator</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-lighter: #222222;
+            --accent: #e9bc6b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(233, 188, 107, 0.2);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .bot-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .chat-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--bg-lighter);
+            border-radius: 12px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--bg-dark);
+        }
+
+        .message-bubble {
+            background: rgba(233, 188, 107, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            color: var(--text-primary);
+        }
+
+        .user-message .message-bubble {
+            background: rgba(233, 188, 107, 0.2);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 20px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: typing 1s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-wrapper {
+            background: var(--bg-lighter);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message-input {
+            background: transparent;
+            border: 1px solid rgba(233, 188, 107, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            resize: none;
+            min-height: 20px;
+            max-height: 150px;
+            width: calc(100% - 24px);
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .send-button {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(233, 188, 107, 0.3);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-lighter);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        ::placeholder {
+            color: var(--text-secondary);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -18,14 +230,13 @@
                 </div>
             </div>
             <div class="controls">
-                <button class="theme-toggle" aria-label="Toggle theme">
+                {% comment %} <button class="theme-toggle" aria-label="Toggle theme">
                     <i class="fas fa-moon"></i>
-                </button>
+                </button> {% endcomment %}
             </div>
         </header>
 
         <div class="chat-container" id="chatContainer">
-            <!-- Initial message from bot -->
             <div class="message bot-message">
                 <div class="avatar">AI</div>
                 <div class="message-bubble">
@@ -110,12 +321,10 @@
 
             if (!query) return;
 
-            // Add user message
             addMessage(query, true);
             queryInput.value = '';
             queryInput.style.height = 'auto';
 
-            // Show typing indicator
             showTypingIndicator();
 
             try {
@@ -134,7 +343,6 @@
 
                 const result = await response.json();
                 
-                // Hide typing indicator and add bot response
                 hideTypingIndicator();
                 addMessage(result.data.raw);
             } catch (error) {

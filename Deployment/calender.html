@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Theme Calendar</title>
+    <title>Calendar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -275,6 +275,17 @@
             }
         }
 
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -305,6 +316,13 @@
 </head>
 <body>
     <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <i class="fas fa-user"></i>
+                <span id="currentUser">Mrinmoy-1601</span>
+            </div>
+            <div class="datetime-display" id="currentDateTime"></div>
+        </div>
 
         <div class="calendar">
             <div class="calendar-header">
@@ -365,51 +383,98 @@
     </div>
 
     <script>
-        let currentDate = new Date();
+        let currentDate = new Date();  // Use system time
         let events = JSON.parse(localStorage.getItem('calendarEvents')) || {};
-
-        // Initialize with current user
-        const currentUser = 'Mrinmoy-1601';
+        const currentUser = 'SRINJOY59';
         
         function updateDateTime() {
-            const now = new Date('2025-01-31T02:01:39Z'); // Using the specified date/time
+            const now = new Date();  // Use system time
+            const istNow = new Date(now.getTime());
             document.getElementById('currentDateTime').textContent = 
-                now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+                formatDateTime(istNow) + ' IST';
         }
-
-        if ("Notification" in window) {
-            Notification.requestPermission();
+        
+        function formatDateTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
-
+        
         function sendNotification(title, message) {
-            if (Notification.permission === "granted") {
-                new Notification(title, {
-                    body: message,
-                    icon: 'https://img.icons8.com/color/48/000000/calendar.png'
-                });
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    const options = {
+                        body: message,
+                        icon: 'https://img.icons8.com/color/48/000000/calendar.png',
+                        silent: false,
+                        requireInteraction: true,
+                        vibrate: [200, 100, 200]
+                    };
+                    
+                    new Notification(title, options);
+                    showInAppNotification(title, message);
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            sendNotification(title, message);
+                        }
+                    });
+                }
             }
+            showInAppNotification(title, message);
         }
-
+        
+        function showInAppNotification(title, message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <strong>${title}</strong><br>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 5000);
+        }
+        
         function checkEvents() {
-            const now = new Date();
-            const currentDateStr = now.toISOString().split('T')[0];
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-
+            const now = new Date();  // Use system time
+            const istNow = new Date(now.getTime());
+            const currentDateStr = formatDate(istNow);
+            
             if (events[currentDateStr]) {
                 events[currentDateStr].forEach(event => {
                     if (event.time) {
                         const [eventHour, eventMinute] = event.time.split(':').map(Number);
-                        const timeDiff = (eventHour - currentHour) * 60 + (eventMinute - currentMinute);
                         
-                        if (timeDiff === 5) {
+                        // Create event date in IST
+                        const eventDate = new Date(currentDateStr);
+                        eventDate.setHours(eventHour, eventMinute, 0, 0);
+                        
+                        // Calculate time difference in minutes
+                        const timeDiff = Math.floor((eventDate - istNow) / (1000 * 60));
+                        
+                        console.log(`Event: ${event.title}, Time Difference: ${timeDiff} minutes`);
+                        
+                        // Send notification 30 minutes before
+                        if (timeDiff <= 30 && timeDiff >= 29) {
                             sendNotification(
                                 "Event Starting Soon",
-                                `${event.title} will start in 5 minutes!`
+                                `${event.title} will start in 30 minutes!`
                             );
                         }
                         
-                        if (timeDiff === 0) {
+                        // Send notification at start time
+                        if (timeDiff <= 0 && timeDiff >= -1) {
                             sendNotification(
                                 "Event Starting Now",
                                 `${event.title} is starting now!`
@@ -419,7 +484,7 @@
                 });
             }
         }
-
+        
         function renderCalendar() {
             const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
             const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -427,42 +492,46 @@
             
             document.getElementById('monthYear').textContent = 
                 currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
+        
             const days = [];
             
+            // Previous month's days
             for (let i = firstDay.getDay(); i > 0; i--) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, prevLastDay.getDate() - i + 1),
                     isOtherMonth: true
                 });
             }
-
+        
+            // Current month's days
             for (let i = 1; i <= lastDay.getDate(); i++) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth(), i),
                     isOtherMonth: false
                 });
             }
-
+        
+            // Next month's days
             for (let i = 1; i <= 42 - days.length; i++) {
                 days.push({
                     date: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, i),
                     isOtherMonth: true
                 });
             }
-
+        
             const calendarDays = document.getElementById('calendarDays');
             calendarDays.innerHTML = '';
-
+        
             days.forEach(({ date, isOtherMonth }) => {
                 const day = document.createElement('div');
+                const now = new Date();  // Use system time
                 day.className = `day${isOtherMonth ? ' other-month' : ''}${
-                    isSameDay(date, new Date()) ? ' today' : ''
+                    isSameDay(date, now) ? ' today' : ''
                 }`;
-
+        
                 const dateKey = formatDate(date);
                 const dayEvents = events[dateKey] || [];
-
+        
                 day.innerHTML = `
                     <div class="day-number">${date.getDate()}</div>
                     <ul class="events">
@@ -474,81 +543,98 @@
                         <i class="fas fa-plus"></i>
                     </button>
                 `;
-
+        
                 calendarDays.appendChild(day);
             });
         }
-
+        
         function isSameDay(date1, date2) {
             return date1.getDate() === date2.getDate() &&
                    date1.getMonth() === date2.getMonth() &&
                    date1.getFullYear() === date2.getFullYear();
         }
-
+        
         function formatDate(date) {
-            return date.toISOString().split('T')[0];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
-
+        
         function previousMonth() {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
         }
-
+        
         function nextMonth() {
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar();
         }
-
+        
         function currentMonth() {
-            currentDate = new Date();
+            currentDate = new Date();  // Use system time
             renderCalendar();
         }
-
+        
         function showModal(date) {
             const modal = document.getElementById('eventModal');
             const dateInput = document.getElementById('eventDate');
             dateInput.value = date;
             modal.style.display = 'flex';
         }
-
+        
         function closeModal() {
             document.getElementById('eventModal').style.display = 'none';
             document.getElementById('eventForm').reset();
         }
-
+        
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const date = document.getElementById('eventDate').value;
             const time = document.getElementById('eventTime').value;
+            const title = document.getElementById('eventTitle').value;
+            const description = document.getElementById('eventDescription').value;
+            
             const event = {
-                title: document.getElementById('eventTitle').value,
-                description: document.getElementById('eventDescription').value,
+                title: title,
+                description: description,
                 time: time,
                 createdBy: currentUser,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString()  // Use system time
             };
-
+        
             if (!events[date]) {
                 events[date] = [];
             }
             events[date].push(event);
             
             localStorage.setItem('calendarEvents', JSON.stringify(events));
-
+        
             sendNotification(
-                "Event Scheduled",
-                `Event "${event.title}" scheduled for ${date} at ${time}`
+                "Event Scheduled Successfully",
+                `"${title}" scheduled for ${date} at ${time} IST\nYou'll be notified 30 minutes before the event.`
             );
-
+        
             closeModal();
             renderCalendar();
         });
-
+        
         // Initialize
-        renderCalendar();
-        updateDateTime();
-        setInterval(checkEvents, 60000); // Check for events every minute
+        document.addEventListener('DOMContentLoaded', () => {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(function(permission) {
+                    console.log("Notification permission:", permission);
+                });
+            }
+            
+            // Check for events every 10 seconds
+            setInterval(checkEvents, 10000);
+            
+            renderCalendar();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
     </script>
 </body>
 </html>
