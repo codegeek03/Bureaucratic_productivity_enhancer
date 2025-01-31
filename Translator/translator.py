@@ -5,7 +5,7 @@ import tiktoken
 from dotenv import load_dotenv
 from icecream import ic
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
+load_dotenv()
 
 import groq  
 client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
