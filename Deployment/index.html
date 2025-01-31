@@ -8,7 +8,7 @@
   <title>BeauroNiti.ai - AI-Powered Bureaucratic Solutions</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module" src="/src/main.js"></script>
+  <!-- <script type="module" src="/src/main.js"></script> -->
 </head>
 
 <body class="bg-[#121212] text-white">
@@ -16,7 +16,7 @@
     <nav class="bg-[#222222] border-[#333333]">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <span class="self-center text-2xl font-semibold text-[#e9bc6b]">BeauroNiti.ai</span>
-        
+
         <!-- User Info -->
         <div class="flex items-center space-x-4">
           <span class="text-sm text-gray-300">
@@ -40,8 +40,7 @@
           <ul
             class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-[#333333] rounded-lg bg-[#222222] md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
             <li>
-              <a href="/auth.html"
-                class="block py-2 px-3 text-[#e9bc6b] rounded md:bg-transparent md:p-0"
+              <a href="/auth.html" class="block py-2 px-3 text-[#e9bc6b] rounded md:bg-transparent md:p-0"
                 aria-current="page">Home</a>
             </li>
             <li>
@@ -55,23 +54,39 @@
   </header>
 
   <main>
-    <section class="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-[#121212] bg-blend-multiply">
+    <section
+      class="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-[#121212] bg-blend-multiply">
       <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
         <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-[#e9bc6b] md:text-5xl lg:text-6xl">
           Empowering Bureaucracy with AI Powered Productivity
         </h1>
         <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
-          Maximize efficiency, streamline workflows, and eliminate administrative bottlenecks with AI-driven insights. Our cutting-edge solution transforms bureaucratic processes into seamless, data-driven excellence.
+          Maximize efficiency, streamline workflows, and eliminate administrative bottlenecks with AI-driven insights.
+          Our cutting-edge solution transforms bureaucratic processes into seamless, data-driven excellence.
         </p>
         <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-          <a href="#" id="sign-up-trigger"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-[#121212] rounded-lg bg-[#e9bc6b] hover:bg-[#d4a75c] focus:ring-4 focus:ring-[#e9bc6b]/50">
-            Get Started
-          </a>
-          <a href="#" id="sign-in-trigger"
-            class="inline-flex justify-center items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-[#e9bc6b] hover:bg-[#222222] hover:text-[#e9bc6b] focus:ring-4 focus:ring-[#e9bc6b]/30">
-            Learn More
-          </a>
+          <!-- Authentication Buttons -->
+          <div id="auth-buttons">
+            <a href="#" id="sign-up-trigger"
+              class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-[#121212] rounded-lg bg-[#e9bc6b] hover:bg-[#d4a75c] focus:ring-4 focus:ring-[#e9bc6b]/50">
+              Signup
+            </a>
+            <a href="#" id="sign-in-trigger"
+              class="inline-flex justify-center items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-[#e9bc6b] hover:bg-[#222222] hover:text-[#e9bc6b] focus:ring-4 focus:ring-[#e9bc6b]/30">
+              Login
+            </a>
+          </div>
+          <!-- User Buttons (initially hidden) -->
+          <div id="user-buttons" style="display: none;">
+            <a href="/dashboard" id="dashboard-button"
+              class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-[#121212] rounded-lg bg-[#e9bc6b] hover:bg-[#d4a75c] focus:ring-4 focus:ring-[#e9bc6b]/50">
+              Dashboard
+            </a>
+            <a href="#" id="sign-out-button"
+              class="inline-flex justify-center items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-[#e9bc6b] hover:bg-[#222222] hover:text-[#e9bc6b] focus:ring-4 focus:ring-[#e9bc6b]/30">
+              Sign Out
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -79,75 +94,99 @@
     <section class="bg-[#121212]">
       <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
+
           <!-- AI Speech Generation -->
           <div class="bg-[#222222] border border-[#333333] rounded-lg p-8 md:p-12">
-            <a href="#" class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
-              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 14H9v-4h2v4zm0-6H9V6h2v2z"/>
+            <a href="#"
+              class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
+              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 14">
+                <path
+                  d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 14H9v-4h2v4zm0-6H9V6h2v2z" />
               </svg>
               AI Speech Generation
             </a>
             <h2 class="text-white text-3xl font-extrabold mb-2">AI-Powered Conference Speech Generation</h2>
-            <p class="text-lg font-normal text-gray-300 mb-4">Generate compelling, well-structured speeches for conferences, meetings, and corporate events in seconds using AI-driven insights.</p>
-            <a href="#" class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
+            <p class="text-lg font-normal text-gray-300 mb-4">Generate compelling, well-structured speeches for
+              conferences, meetings, and corporate events in seconds using AI-driven insights.</p>
+            <a href="#"
+              class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
               Read more
               <svg class="w-3.5 h-3.5 ms-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
             </a>
           </div>
-    
+
           <!-- AI Translation -->
           <div class="bg-[#222222] border border-[#333333] rounded-lg p-8 md:p-12">
-            <a href="#" class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
-              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm5 13h-2v-1H7v1H5v-2h2v-1h6v1h2v2z"/>
+            <a href="#"
+              class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
+              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 20">
+                <path
+                  d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm5 13h-2v-1H7v1H5v-2h2v-1h6v1h2v2z" />
               </svg>
               AI Translation
             </a>
             <h2 class="text-white text-3xl font-extrabold mb-2">Real-Time AI Translation</h2>
-            <p class="text-lg font-normal text-gray-300 mb-4">Break language barriers effortlessly with AI-powered real-time speech and text translation for global communication.</p>
-            <a href="#" class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
+            <p class="text-lg font-normal text-gray-300 mb-4">Break language barriers effortlessly with AI-powered
+              real-time speech and text translation for global communication.</p>
+            <a href="#"
+              class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
               Read more
               <svg class="w-3.5 h-3.5 ms-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
             </a>
           </div>
-    
+
           <!-- AI Calendar & Event Scheduling -->
           <div class="bg-[#222222] border border-[#333333] rounded-lg p-8 md:p-12">
-            <a href="#" class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
-              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 2h16v12H2z"/>
+            <a href="#"
+              class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
+              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2 2h16v12H2z" />
               </svg>
               AI Calendar
             </a>
             <h2 class="text-white text-3xl font-extrabold mb-2">AI-Driven Calendar & Scheduling</h2>
-            <p class="text-lg font-normal text-gray-300 mb-4">Optimize your schedule with AI-powered event planning, automated reminders, and seamless calendar integration.</p>
-            <a href="#" class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
+            <p class="text-lg font-normal text-gray-300 mb-4">Optimize your schedule with AI-powered event planning,
+              automated reminders, and seamless calendar integration.</p>
+            <a href="#"
+              class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
               Read more
               <svg class="w-3.5 h-3.5 ms-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
             </a>
           </div>
-    
+
           <!-- AI Smart Voice Dictation -->
           <div class="bg-[#222222] border border-[#333333] rounded-lg p-8 md:p-12">
-            <a href="#" class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
-              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 1a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"/>
+            <a href="#"
+              class="bg-[#e9bc6b]/10 text-[#e9bc6b] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md mb-2">
+              <svg class="w-2.5 h-2.5 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 1a4 4 0 0 0-4 4v4a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z" />
               </svg>
               AI Voice Dictation
             </a>
             <h2 class="text-white text-3xl font-extrabold mb-2">Smart AI Voice Dictation</h2>
-            <p class="text-lg font-normal text-gray-300 mb-4">Transcribe meetings, notes, and speeches with near-perfect accuracy using AI-powered smart voice dictation.</p>
-            <a href="#" class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
+            <p class="text-lg font-normal text-gray-300 mb-4">Transcribe meetings, notes, and speeches with near-perfect
+              accuracy using AI-powered smart voice dictation.</p>
+            <a href="#"
+              class="text-[#e9bc6b] hover:text-[#d4a75c] hover:underline font-medium text-lg inline-flex items-center">
               Read more
               <svg class="w-3.5 h-3.5 ms-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
             </a>
           </div>
@@ -174,5 +213,62 @@
     </div>
   </footer>
 
+
+  <script type="module">
+    import { Clerk } from '@clerk/clerk-js';
+
+    const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+    const clerk = new Clerk(clerkPubKey);
+
+    await clerk.load();
+
+    const authButtons = document.getElementById('auth-buttons');
+    const userButtons = document.getElementById('user-buttons');
+
+    function updateUIBasedOnAuth() {
+      if (clerk.user) {
+        // User is logged in
+        authButtons.style.display = 'none';
+        userButtons.style.display = 'block';
+
+        // Log user info
+        const firstName = clerk.user.firstName;
+        const lastName = clerk.user.lastName;
+        const email = clerk.user.emailAddresses[0].emailAddress;
+        console.log(`User: ${firstName} ${lastName} (${email})`);
+      } else {
+        // User is logged out
+        authButtons.style.display = 'block';
+        userButtons.style.display = 'none';
+      }
+    }
+
+    // Initial UI update
+    updateUIBasedOnAuth();
+
+    // Event listeners for non-authenticated users
+    document.getElementById('sign-up-trigger').addEventListener('click', (e) => {
+      e.preventDefault();
+      clerk.openSignUp();
+    });
+
+    document.getElementById('sign-in-trigger').addEventListener('click', (e) => {
+      e.preventDefault();
+      clerk.openSignIn();
+    });
+
+    // Event listener for sign out
+    document.getElementById('sign-out-button').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await clerk.signOut();
+      updateUIBasedOnAuth();
+    });
+
+    // Listen for auth state changes
+    clerk.addListener(({ user }) => {
+      updateUIBasedOnAuth();
+    });
+  </script>
 </body>
+
 </html>

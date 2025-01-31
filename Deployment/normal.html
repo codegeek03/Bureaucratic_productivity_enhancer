@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BeauroNiti.ai - AI-Powered Bureaucratic Solutions</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <script type="module" src="/src/main.js"></script> -->
+</head>
+
+<body class="bg-[#121212] text-white">
+    <main>
+        <section
+          class="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-[#121212] bg-blend-multiply">
+          <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-[#e9bc6b] md:text-5xl lg:text-6xl">
+              Empowering Bureaucracy with AI Powered Productivity
+            </h1>
+            <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
+              Maximize efficiency, streamline workflows, and eliminate administrative bottlenecks with AI-driven insights.
+              Our cutting-edge solution transforms bureaucratic processes into seamless, data-driven excellence.
+            </p>
+            <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+              <a href="#" id="sign-up-trigger"
+                class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-[#121212] rounded-lg bg-[#e9bc6b] hover:bg-[#d4a75c] focus:ring-4 focus:ring-[#e9bc6b]/50">
+                Get Started
+              </a>
+              <a href="#" id="sign-in-trigger"
+                class="inline-flex justify-center items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-[#e9bc6b] hover:bg-[#222222] hover:text-[#e9bc6b] focus:ring-4 focus:ring-[#e9bc6b]/30">
+                Learn More
+              </a>
+            </div>
+          </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { Clerk } from '@clerk/clerk-js';
+    
+        const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+    
+        const clerk = new Clerk(clerkPubKey);
+    
+        await clerk.load();
+        // Get user info
+        if (clerk.user) {
+          const firstName = clerk.user.firstName;
+          const lastName = clerk.user.lastName;
+          const email = clerk.user.emailAddresses[0].emailAddress;
+    
+          console.log(`User: ${firstName} ${lastName} (${email})`);
+        }
+        if (clerk.user) {
+          // If the user is logged in, hide the trigger buttons
+          document.getElementById('sign-up-trigger').style.display = 'none';
+          document.getElementById('sign-in-trigger').style.display = 'none';
+        } else {
+          // Show the SignUp and SignIn buttons if the user is not logged in
+          document.getElementById('sign-up-trigger').style.display = 'block';
+          document.getElementById('sign-in-trigger').style.display = 'block';
+    
+          // Event listeners for opening the Clerk modals
+          document.getElementById('sign-up-trigger').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            clerk.openSignUp();
+          });
+    
+          document.getElementById('sign-in-trigger').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            clerk.openSignIn();
+          });
+        }
+    
+      </script>
+    
+    </body>
+    
+    </html>
