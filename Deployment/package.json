@@ -6,12 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server.js"
   },
   "devDependencies": {
     "vite": "^6.0.5"
   },
   "dependencies": {
-    "@clerk/clerk-js": "^5.50.1"
+    "@clerk/clerk-js": "^5.50.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.6"
   }
 }

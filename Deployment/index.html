@@ -204,40 +204,155 @@
     </div>
   </footer>
 
+  <!-- User Details Modal -->
+  <!-- User Details Modal -->
+  <div id="user-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto"
+    style="z-index: 1000;">
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative w-full max-w-md p-6 border shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+          <h3 class="text-lg md:text-xl leading-6 font-medium text-gray-900 text-center mb-6">
+            Complete Your Profile
+          </h3>
+          <form id="user-details-form" class="mt-4 space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Name</label>
+              <input type="text" id="name" required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#e9bc6b] focus:ring-[#e9bc6b] text-black">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Email</label>
+              <input type="email" id="email" required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#e9bc6b] focus:ring-[#e9bc6b] text-black">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input type="tel" id="phone" required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#e9bc6b] focus:ring-[#e9bc6b] text-black">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Passkey</label>
+              <input type="password" id="passkey" required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#e9bc6b] focus:ring-[#e9bc6b] text-black">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Job Description (100 words)</label>
+              <textarea id="jobDescription" required rows="4"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#e9bc6b] focus:ring-[#e9bc6b] text-black"></textarea>
+            </div>
+            <div class="flex justify-center pt-4">
+              <button type="submit"
+                class="w-full sm:w-auto px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#e9bc6b] hover:bg-[#d4a75c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e9bc6b] transition-colors duration-200">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="module">
     import { Clerk } from '@clerk/clerk-js';
 
     const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+    const apiUrl = import.meta.env.VITE_API_URL;
     const clerk = new Clerk(clerkPubKey);
 
     await clerk.load();
 
     const authButtons = document.getElementById('auth-buttons');
     const userButtons = document.getElementById('user-buttons');
+    const modal = document.getElementById('user-details-modal');
+    const userDetailsForm = document.getElementById('user-details-form');
 
-    function updateUIBasedOnAuth() {
+    function showModal() {
+      modal.classList.remove('hidden');
+    }
+
+    function hideModal() {
+      modal.classList.add('hidden');
+    }
+
+    // Add this new function to check if user exists in MongoDB
+    async function checkUserExists(clerkUserId) {
+      try {
+        const response = await fetch(`${apiUrl}/api/users/${clerkUserId}`);
+        return response.ok; // Will return true if user exists, false otherwise
+      } catch (error) {
+        console.error('Error checking user:', error);
+        return false;
+      }
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const formData = {
+        clerkUserId: clerk.user.id,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        passkey: document.getElementById('passkey').value,
+        jobDescription: document.getElementById('jobDescription').value
+      };
+
+      try {
+        const response = await fetch(`${apiUrl}/api/users`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          hideModal();
+          // Redirect to dashboard after successful submission
+          window.location.href = '/dashboard';
+        } else {
+          throw new Error('Failed to save user details');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to save user details. Please try again.');
+      }
+    }
+
+    async function updateUIBasedOnAuth() {
       if (clerk.user) {
         // User is logged in
+        const userExists = await checkUserExists(clerk.user.id);
+
         authButtons.style.display = 'none';
         userButtons.style.display = 'block';
 
-        // Log user info
-        const firstName = clerk.user.firstName;
-        const lastName = clerk.user.lastName;
-        const email = clerk.user.emailAddresses[0].emailAddress;
-        console.log(`User: ${firstName} ${lastName} (${email})`);
+        if (!userExists) {
+          // Only show modal if user doesn't exist in MongoDB
+          showModal();
+
+          // Pre-fill form fields if available
+          document.getElementById('name').value = `${clerk.user.firstName || ''} ${clerk.user.lastName || ''}`.trim();
+          document.getElementById('email').value = clerk.user.emailAddresses[0]?.emailAddress || '';
+          document.getElementById('phone').value = clerk.user.primaryPhoneNumber || '';
+        } else {
+          // If user exists, hide modal
+          hideModal();
+        }
       } else {
         // User is logged out
         authButtons.style.display = 'block';
         userButtons.style.display = 'none';
+        hideModal();
       }
     }
 
     // Initial UI update
     updateUIBasedOnAuth();
 
-    // Event listeners for non-authenticated users
+    // Event listeners
+    userDetailsForm.addEventListener('submit', handleFormSubmit);
+
     document.getElementById('sign-up-trigger').addEventListener('click', (e) => {
       e.preventDefault();
       clerk.openSignUp();
@@ -248,7 +363,6 @@
       clerk.openSignIn();
     });
 
-    // Event listener for sign out
     document.getElementById('sign-out-button').addEventListener('click', async (e) => {
       e.preventDefault();
       await clerk.signOut();
