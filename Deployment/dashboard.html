@@ -19,7 +19,7 @@
 
 
                 <div class="info-content">
-                    <h1 class="name" title="Richard Hanrick">Shamik<br /> Bhattacharjee</h1>
+                    <h1 class="name" title=""></h1>
                     <p class="title">Regional IPS Officer</p>
                 </div>
 
@@ -46,7 +46,7 @@
                             <p class="contact-title">Email</p>
 
 
-                            <a href="mailto:richard@example.com" class="contact-link">shamik@gmail.com</a>
+                            <a href="mailto:richard@example.com" class="contact-link"></a>
                         </div>
                     </li>
 
@@ -61,7 +61,7 @@
                             <p class="contact-title">Phone</p>
 
 
-                            <a href="tel:+12133522795" class="contact-link">+1 (213) 352-2795</a>
+                            <a href="tel:+12133522795" class="contact-link1" style="color: white;"></a>
                         </div>
                     </li>
 
@@ -128,10 +128,7 @@
 
 
                 <section class="about-text">
-                    <p>I am a Regional IPS Officer, entrusted with ensuring law and order, safety, and justice within my
-                        assigned region. With a focus on strategic policing, criminal investigations, and community
-                        engagement, I work closely with local authorities to address regional challenges, enforce laws,
-                        and maintain peace and security.</p>
+                    <p></p>
                 </section>
 
 
@@ -1004,12 +1001,65 @@
             transform: translateY(-2px);
         }
     </style>
-
-
-
-
     <script src="temp.js"></script>
+    <script type="module">
+        import { Clerk } from '@clerk/clerk-js';
+
+        const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const clerk = new Clerk(clerkPubKey);
+
+        await clerk.load();
+
+        console.log('Form data:', clerk.user.id);
+
+        async function checkUserExists(clerkUserId) {
+            try {
+                const response = await fetch(`${apiUrl}/api/users/${clerkUserId}`);
+                console.log('Response status:', response.ok);
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('User data:', userData);
+                    updateUserInterface(userData); // Add this line to update the UI
+                    return userData;
+                } else {
+                    console.log('User not found or error occurred');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error checking user:', error);
+                return false;
+            }
+        }
+
+        // Function to update the UI with user data
+        function updateUserInterface(userData) {
+            // Update the name
+            const nameElement = document.querySelector('.name');
+            const fullName = userData.name.split(' ');
+            nameElement.innerHTML = `${fullName[0]}<br />${fullName[1] || ''}`; // Splits name into first and last name
+
+            // Update the email
+            const emailLink = document.querySelector('.contact-link');
+            emailLink.href = `mailto:${userData.email}`;
+            emailLink.textContent = userData.email;
+
+            const phone = document.querySelector('.contact-link1');
+            phone.href = `tel:${userData.phone}`;
+            phone.textContent = userData.phone;
+
+            const aboutTextElement = document.querySelector('.about-text p');
+            if (userData.jobDescription) {
+                aboutTextElement.textContent = userData.jobDescription;
+            }
+        }
+
+        const userData = await checkUserExists(clerk.user.id);
+    </script>
     <script>
+
+
         // Initialize todos array in localStorage if it doesn't exist
         if (!localStorage.getItem('todos')) {
             localStorage.setItem('todos', JSON.stringify([]));

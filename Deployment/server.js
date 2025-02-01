@@ -44,16 +44,16 @@ app.post('/api/users', async (req, res) => {
 app.get('/api/users/:clerkUserId', async (req, res) => {
     try {
         const user = await User.findOne({ clerkUserId: req.params.clerkUserId });
+        console.log('Backend user data:', user); // Add this to debug
         if (user) {
-            res.status(200).json({ exists: true });
+            res.status(200).json(user);
         } else {
-            res.status(404).json({ exists: false });
+            res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

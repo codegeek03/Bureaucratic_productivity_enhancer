@@ -297,6 +297,8 @@
         jobDescription: document.getElementById('jobDescription').value
       };
 
+
+
       try {
         const response = await fetch(`${apiUrl}/api/users`, {
           method: 'POST',
@@ -318,6 +320,8 @@
         alert('Failed to save user details. Please try again.');
       }
     }
+
+    console.log('Form data:', clerk.user.id);
 
     async function updateUIBasedOnAuth() {
       if (clerk.user) {
