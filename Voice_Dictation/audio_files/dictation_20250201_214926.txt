@@ -1,0 +1,3 @@
+Hello, how are you?
+
+Response: I am a professional assistant. How may I assist you today?
