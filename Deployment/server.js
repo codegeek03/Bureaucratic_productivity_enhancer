@@ -54,7 +54,17 @@ app.get('/api/users/:clerkUserId', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Define the host (0.0.0.0 allows external connections)
+const HOST = '0.0.0.0';
+
+// Your routes and middleware here
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+// Start the server
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on http://${HOST}:${PORT}`);
 });
