@@ -47,7 +47,7 @@ To deploy and run the application, please follow these steps:
 **How to Run**:
 Navigate to the `AI_content_generator` directory and execute the following command:
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload --host 0.0.0.0 --port 9000
 ```
 This will start the FastAPI server for the AI content generator.
 
@@ -64,7 +64,7 @@ This will start the FastAPI server for the AI content generator.
 **How to Run**:
 Navigate to the `Translator` directory and execute:
 ```bash
-uvicorn api:app --reload
+uvicorn api:app --reload --host 0.0.0.0 --port 9001
 ```
 This will start the FastAPI server for the translation service.
 
@@ -81,7 +81,7 @@ This will start the FastAPI server for the translation service.
 **How to Run**:
 Navigate to the `Voice_Dictation` directory and execute:
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --reload --host 0.0.0.0 --port 9002
 ```
 This will start the FastAPI server for the voice dictation service.
 
