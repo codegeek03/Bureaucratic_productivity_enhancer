@@ -1,0 +1,10 @@
+{
+  "original_text": "my roommate is very",
+  "corrected_version": "My roommate is very quiet.",
+  "fact_check": {
+    "alert_level": "HIGH",
+    "verification_status": false,
+    "verification_note": "Error in fact verification process"
+  },
+  "detailed_analysis": "CLAIMS: \n1. The individual in question is a roommate.\n2. The roommate exhibits quiet behavior.\n\nVERIFICATION_STATUS: \n1. True - This claim can be verified if the person making the statement and the roommate are known and can be confirmed through personal knowledge or documentation.\n2. Uncertain - The verifiability of this claim depends on the observer's ability to accurately judge the roommate's behavior. It may not be possible for a third party to objectively verify this claim without additional context or evidence.\n\nCORRECTED_STATEMENT: [No correction needed]"
+}

@@ -13,7 +13,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Create a directory for temporary file storage if it doesn't exist
 UPLOAD_DIR = "temp_uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(233, 188, 107, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(233, 188, 107, 0.1) 0%, transparent 20%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .upload-form {
+            background-color: #222222;
+            max-width: 900px;
+            width: 90%;
+            margin: 20px;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(233, 188, 107, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #e9bc6b, transparent);
+        }
+
+        h2 {
+            color: #e9bc6b;
+            margin-bottom: 35px;
+            font-size: 2.5em;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .info-section {
+            background: linear-gradient(145deg, rgba(233, 188, 107, 0.1), rgba(233, 188, 107, 0.05));
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(233, 188, 107, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-section p {
+            color: #fff;
+            margin: 5px 0;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-section p::before {
+            content: '•';
+            color: #e9bc6b;
+            font-size: 1.5em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .file-input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: linear-gradient(145deg, rgba(233, 188, 107, 0.05), rgba(233, 188, 107, 0.1));
+            border: 2px dashed #e9bc6b;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            color: #e9bc6b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-label:hover {
+            background-color: rgba(233, 188, 107, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 188, 107, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #e9bc6b, #d4a757);
+            color: #121212;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(233, 188, 107, 0.3);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 40px;
+            padding: 25px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, rgba(233, 188, 107, 0.05), rgba(233, 188, 107, 0.1));
+            border: 1px solid rgba(233, 188, 107, 0.2);
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .result h3 {
+            color: #e9bc6b;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        pre {
+            color: #fff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: rgba(26, 26, 26, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 0.95em;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(233, 188, 107, 0.1);
+        }
+
+        .error {
+            color: #ff6b6b;
+            background: linear-gradient(145deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #e9bc6b, #d4a757);
+            border-radius: 5px;
+            border: 2px solid rgba(26, 26, 26, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #d4a757, #c39646);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(233, 188, 107, 0.1);
+            border-left: 4px solid #e9bc6b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        .loading p {
+            color: #e9bc6b;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Glowing effect for important elements */
+        .file-input-label::after,
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(233, 188, 107, 0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-input-label:hover::after,
+        button:hover::after {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .upload-form {
+                padding: 30px;
+                width: 95%;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .info-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-form">
+        <h2>Image Analysis</h2>
+        <div class="info-section">
+            <p>Upload an image to analyze its contents</p>
+            <p>Supported formats: JPG, PNG, GIF, BMP, TIFF</p>
+        </div>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="file-input-container">
+                <label for="imageFile" class="file-input-label">
+                    <span id="fileLabel">Choose an image or drag & drop here</span>
+                </label>
+                <input type="file" id="imageFile" name="file" accept="image/*" required>
+            </div>
+            <button type="submit">Analyze Image</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing image...</p>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- JavaScript remains the same -->
+    <script>
+        const fileInput = document.getElementById('imageFile');
+        const fileLabel = document.getElementById('fileLabel');
+        const loading = document.getElementById('loading');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                fileLabel.textContent = e.target.files[0].name;
+            } else {
+                fileLabel.textContent = 'Choose an image or drag & drop here';
+            }
+        });
+
+        // Form submission
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileField = document.getElementById('imageFile');
+            formData.append('file', fileField.files[0]);
+            
+            // Show loading animation
+            loading.style.display = 'block';
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3>Analysis Results</h3>
+                        <pre>${JSON.stringify(result.data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">Error: ${result.detail}</div>`;
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="error">Error uploading file: ${error.message}</div>`;
+            } finally {
+                // Hide loading animation
+                loading.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }
+        });
+
+        // Drag and drop functionality
+        const dropZone = document.querySelector('.file-input-label');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.style.backgroundColor = 'rgba(233, 188, 107, 0.3)';
+        }
+
+        function unhighlight(e) {
+            dropZone.style.backgroundColor = 'rgba(233, 188, 107, 0.1)';
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            fileInput.files = files;
+            if (files[0]) {
+                fileLabel.textContent = files[0].name;
+            }
+        }
+    </script>
+</body>
+</html>

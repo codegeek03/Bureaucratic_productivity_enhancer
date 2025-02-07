@@ -5,3 +5,4 @@ langchain-groq
 crewai
 'crewai[tools]'
 tavily-python
+mistralai

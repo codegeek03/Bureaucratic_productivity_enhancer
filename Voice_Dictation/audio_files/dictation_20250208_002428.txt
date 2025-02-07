@@ -1,0 +1,10 @@
+{
+  "original_text": "sun rises in the west",
+  "corrected_version": "The sun rises in the east.",
+  "fact_check": {
+    "alert_level": "HIGH",
+    "verification_status": false,
+    "verification_note": "Error in fact verification process"
+  },
+  "detailed_analysis": "CLAIMS: \n1. The celestial body we refer to as the \"sun\" exists.\n2. The sun appears to move in the sky.\n3. The sun rises.\n4. The sun rises in a specific direction, which is referred to as \"the east\".\n\nVERIFICATION_STATUS: \n1. True\n2. True\n3. True\n4. True\n\nCORRECTED_STATEMENT: The statement is factually correct. The sun does rise in the east. However, it's important to note that this is due to the Earth's rotation, not the sun's movement."
+}
