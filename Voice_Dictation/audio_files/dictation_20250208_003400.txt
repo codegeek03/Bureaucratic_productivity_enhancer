@@ -1,0 +1,10 @@
+{
+  "original_text": "hello guys what are you",
+  "corrected_version": "\"Hello, what are you up to?\" or \"Hello, what are you working on?\"",
+  "fact_check": {
+    "alert_level": "HIGH",
+    "verification_status": false,
+    "verification_note": "Error in fact verification process"
+  },
+  "detailed_analysis": "CLAIMS: There are no specific factual claims made in the given statements. They are simple greetings or inquiries about the other person's activities.\nVERIFICATION_STATUS: Not applicable as there are no factual claims to verify.\nCORRECTED_STATEMENT: The original statements do not require correction as they do not contain factual claims."
+}

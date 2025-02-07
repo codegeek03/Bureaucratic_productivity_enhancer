@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Recognition App</title>
     <style>
-        /* Reset default margins and ensure full viewport coverage */
+        /* Existing styles */
         * {
             margin: 0;
             padding: 0;
@@ -107,6 +107,34 @@
             background-color: #e9bc6b;
             color: #121212;
         }
+
+        /* New Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #333333;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #e9bc6b;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: #121212;
+            font-weight: bold;
+            line-height: 20px;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+        }
     
         /* Responsive adjustments */
         @media (max-height: 600px) {
@@ -135,24 +163,6 @@
             }
         }
     </style>
-    
-    <div class="container">
-        <h1>Speech Recognition App</h1>
-        
-        <div class="controls">
-            <button id="adjustNoiseButton">Adjust for Noise</button>
-            <button id="startButton">Start Recording</button>
-            <button id="stopButton" disabled>Stop Recording</button>
-        </div>
-    
-        <div id="status"></div>
-        
-        <textarea id="transcriptionArea" readonly placeholder="Transcription will appear here..."></textarea>
-        
-        <div id="downloadSection">
-            <a id="downloadLink" style="display: none">Download Transcription</a>
-        </div>
-    </div>
 </head>
 <body>
     <div class="container">
@@ -165,6 +175,13 @@
         </div>
 
         <div id="status"></div>
+        
+        <!-- New Progress Bar -->
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar">
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+        </div>
         
         <textarea id="transcriptionArea" readonly placeholder="Transcription will appear here..."></textarea>
         
@@ -180,8 +197,12 @@
         const status = document.getElementById('status');
         const transcriptionArea = document.getElementById('transcriptionArea');
         const downloadLink = document.getElementById('downloadLink');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
 
         let isRecording = false;
+        let progressInterval;
 
         function updateStatus(message, type = 'info') {
             status.textContent = message;
@@ -192,6 +213,33 @@
             startButton.disabled = recording;
             stopButton.disabled = !recording;
             adjustNoiseButton.disabled = recording;
+        }
+
+        function updateProgress(progress) {
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+        }
+
+        function startProgressSimulation() {
+            let progress = 0;
+            progressContainer.style.display = 'block';
+            updateProgress(0);
+
+            progressInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += Math.random() * 5;
+                    progress = Math.min(90, progress);
+                    updateProgress(Math.round(progress));
+                }
+            }, 300);
+        }
+
+        function completeProgress() {
+            clearInterval(progressInterval);
+            updateProgress(100);
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
         }
 
         adjustNoiseButton.addEventListener('click', async () => {
@@ -221,6 +269,7 @@
             isRecording = true;
             toggleButtons(true);
             updateStatus('Recording...', 'warning');
+            startProgressSimulation();
             
             try {
                 const response = await fetch('/listen', {
@@ -230,6 +279,7 @@
                 const data = await response.json();
                 
                 if (response.ok) {
+                    completeProgress();
                     transcriptionArea.value = data.text;
                     updateStatus('Recording complete', 'success');
                     
@@ -267,10 +317,11 @@
             } finally {
                 isRecording = false;
                 toggleButtons(false);
+                clearInterval(progressInterval);
+                progressContainer.style.display = 'none';
             }
         });
 
-        // Check server health on page load
         async function checkHealth() {
             try {
                 const response = await fetch('/health');

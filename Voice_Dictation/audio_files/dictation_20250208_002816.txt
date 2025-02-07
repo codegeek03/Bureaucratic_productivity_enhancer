@@ -1,0 +1,10 @@
+{
+  "original_text": "I don't matter seriously very bad",
+  "corrected_version": "I take this matter very seriously.",
+  "fact_check": {
+    "alert_level": "HIGH",
+    "verification_status": false,
+    "verification_note": "Error in fact verification process"
+  },
+  "detailed_analysis": "CLAIMS: None\nVERIFICATION_STATUS: N/A\nCORRECTED_STATEMENT: N/A\n\nExplanation:\nThe statement \"I take this matter very seriously\" does not contain any factual claims that can be verified. It is an expression of the speaker's attitude or emotion towards a certain matter, which is subjective and not verifiable."
+}

@@ -1,0 +1,10 @@
+{
+  "original_text": "Tumi Ki Amar hobe",
+  "corrected_version": "\"Will you be mine?\"",
+  "fact_check": {
+    "alert_level": "HIGH",
+    "verification_status": false,
+    "verification_note": "Error in fact verification process"
+  },
+  "detailed_analysis": "CLAIMS: None\nVERIFICATION_STATUS: Uncertain\nCORRECTED_STATEMENT: This statement is not factual and does not require verification. It is a rhetorical question or a proposal, which does not contain factual claims."
+}

@@ -9,7 +9,8 @@ from datetime import datetime
 import os
 import logging
 import threading
-from grammar_correction import ProfessionalResponseGenerator        
+from grammar_correction import ProfessionalResponseGenerator    
+from grammar_correction import FactChecker    
 # [Previous imports and configuration remain the same...]
 
 # Load HTML template from index.html
@@ -113,7 +114,6 @@ class SpeechRecognizer:
         finally:
             self.is_listening = False
 
-# Create a global instance of SpeechRecognizer
 try:
     speech_engine = SpeechRecognizer()
 except Exception as e:
@@ -133,6 +133,7 @@ async def listen_audio():
     
     result = speech_engine.listen()
     ans=ProfessionalResponseGenerator().generate_response(result["text"])
+    ans = ans["corrected_version"]
     if result["success"]:
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
