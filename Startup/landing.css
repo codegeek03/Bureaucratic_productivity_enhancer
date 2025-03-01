@@ -276,3 +276,47 @@ nav {
         width: 100%;
     }
 }
+
+/* Add these to your existing CSS */
+.dashboard-btn {
+    background-color: #4CAF50 !important;
+    /* Green color for dashboard */
+    color: white !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.dashboard-btn:hover {
+    background-color: #45a049 !important;
+}
+
+.logout-btn {
+    background-color: #ff4444 !important;
+    /* Red color for logout */
+    color: white !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.logout-btn:hover {
+    background-color: #cc0000 !important;
+}
+
+/* Animation for button swap */
+.cta-buttons {
+    transition: all 0.3s ease;
+}
+
+.btn {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

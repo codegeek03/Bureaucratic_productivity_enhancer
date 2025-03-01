@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     const currentUser = 'bibhabasuiitkgp';
     const currentUTCDate = '2025-03-01 08:31:19';
 
@@ -49,7 +49,7 @@ $(document).ready(function() {
         // Set default date to current UTC date
         const defaultDate = currentUTCDate.split(' ')[0]; // Extract YYYY-MM-DD
         document.getElementById('eventDate').value = defaultDate;
-        
+
         // Set minimum date for both date inputs to current date
         document.getElementById('eventDate').min = defaultDate;
         document.getElementById('eventEndDate').min = defaultDate;
@@ -75,7 +75,7 @@ $(document).ready(function() {
     };
 
     // Add Event Button Click Handler
-    $('#addEventBtn').on('click', function() {
+    $('#addEventBtn').on('click', function () {
         showModal();
     });
 
@@ -87,7 +87,7 @@ $(document).ready(function() {
     });
 
     // Event Type Change Handler
-    document.getElementById('eventType').addEventListener('change', function(e) {
+    document.getElementById('eventType').addEventListener('change', function (e) {
         const color = eventTypeColors[e.target.value];
         if (color) {
             document.getElementById('eventColor').value = color;
@@ -95,10 +95,10 @@ $(document).ready(function() {
     });
 
     // Handle start date change
-    document.getElementById('eventDate').addEventListener('change', function(e) {
+    document.getElementById('eventDate').addEventListener('change', function (e) {
         const startDate = e.target.value;
         document.getElementById('eventEndDate').min = startDate;
-        
+
         // If end date is before start date, update it
         const endDate = document.getElementById('eventEndDate').value;
         if (endDate && endDate < startDate) {
@@ -107,7 +107,7 @@ $(document).ready(function() {
     });
 
     // Form Submit Handler
-    eventForm.addEventListener('submit', function(e) {
+    eventForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
         // Get form values
@@ -145,15 +145,15 @@ $(document).ready(function() {
         // Add event to calendar
         try {
             $('#calendar').evoCalendar('addCalendarEvent', eventData);
-            
+
             // Save to localStorage with user information
             const savedEvents = JSON.parse(localStorage.getItem(`calendarEvents_${currentUser}`) || '[]');
             savedEvents.push(eventData);
             localStorage.setItem(`calendarEvents_${currentUser}`, JSON.stringify(savedEvents));
-            
+
             // Show success message
             alert(`Event "${eventName}" added successfully!`);
-            
+
             // Hide modal and reset form
             hideModal();
         } catch (error) {
@@ -173,20 +173,143 @@ $(document).ready(function() {
     }
 
     // Event click handler
-    $('#calendar').on('selectEvent', function(event, activeEvent) {
-        const dateInfo = Array.isArray(activeEvent.date) 
-            ? `From: ${activeEvent.date[0]}\nTo: ${activeEvent.date[1]}` 
+    $('#calendar').on('selectEvent', function (event, activeEvent) {
+        const dateInfo = Array.isArray(activeEvent.date)
+            ? `From: ${activeEvent.date[0]}\nTo: ${activeEvent.date[1]}`
             : `Date: ${activeEvent.date}`;
-            
+
         let eventInfo = `Event Details:\n\nName: ${activeEvent.name}\n${dateInfo}`;
-        
+
         if (activeEvent.description) {
             eventInfo += `\nDescription: ${activeEvent.description}`;
         }
         if (activeEvent.createdBy) {
             eventInfo += `\n\nCreated by: ${activeEvent.createdBy}\nCreated at: ${activeEvent.createdAt}`;
         }
-        
+
         alert(eventInfo);
     });
 });
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('userData'));
+
+    if (!userData) {
+        // Redirect to login if no user data is found
+        window.location.href = 'landing.html';
+        return;
+    }
+
+    // Update profile information with user data
+    updateProfileInfo(userData);
+
+    // Calendar initialization
+    $('#calendar').evoCalendar({
+        theme: 'Default',
+        todayHighlight: true,
+        sidebarDisplayDefault: false,
+        calendarEvents: []
+    });
+
+    // Event Modal Handling
+    const modal = document.getElementById('eventModal');
+    const addEventBtn = document.getElementById('addEventBtn');
+    const closeBtn = document.querySelector('.close-modal');
+    const cancelBtn = document.querySelector('.btn-cancel');
+    const eventForm = document.getElementById('eventForm');
+
+    // Show modal
+    addEventBtn.onclick = () => {
+        modal.style.display = 'block';
+    }
+
+    // Close modal
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+    }
+
+    cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+    }
+
+    // Close on outside click
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Handle form submission
+    eventForm.onsubmit = (e) => {
+        e.preventDefault();
+
+        const eventData = {
+            name: document.getElementById('eventName').value,
+            date: document.getElementById('eventDate').value,
+            endDate: document.getElementById('eventEndDate').value || null,
+            description: document.getElementById('eventDescription').value,
+            type: document.getElementById('eventType').value,
+            color: document.getElementById('eventColor').value
+        };
+
+        // Add event to calendar
+        $('#calendar').evoCalendar('addCalendarEvent', {
+            id: Date.now(), // Unique ID
+            name: eventData.name,
+            date: eventData.date,
+            description: eventData.description,
+            type: eventData.type,
+            color: eventData.color
+        });
+
+        // Close modal and reset form
+        modal.style.display = 'none';
+        eventForm.reset();
+    }
+});
+
+// Function to update profile information
+function updateProfileInfo(userData) {
+    // Update profile image with username
+    const profileImage = document.querySelector('.profile-image img');
+    profileImage.src = `https://api.dicebear.com/6.x/avataaars/svg?seed=${userData.username}`;
+
+    // Update name
+    document.querySelector('.profile-header h2').textContent = userData.name;
+
+    // Update designation/title
+    document.querySelector('.profile-header .title').textContent = userData.designation;
+
+    // Update email
+    document.querySelector('.info-box:nth-child(1) p').textContent = userData.email;
+
+    // Update phone
+    document.querySelector('.info-box:nth-child(2) p').textContent = userData.phone;
+
+    // Update work experience
+    // document.querySelector('.info-box:nth-child(3) p').textContent = userData.workExperience;
+
+    // Add logout button to social links
+    const socialLinks = document.querySelector('.social-links');
+    const logoutButton = document.createElement('a');
+    logoutButton.href = '#';
+    logoutButton.className = 'social-icon logout';
+    logoutButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+    logoutButton.addEventListener('click', handleLogout);
+    socialLinks.appendChild(logoutButton);
+}
+
+// Function to handle logout
+function handleLogout() {
+    localStorage.removeItem('userData');
+    window.location.href = 'landing.html';
+}

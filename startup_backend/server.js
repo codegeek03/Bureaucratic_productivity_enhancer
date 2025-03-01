@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -16,8 +17,13 @@ function getCurrentUTCDateTime() {
     return now.toISOString().replace('T', ' ').slice(0, 19);
 }
 
+mongo_uri = process.env.MONGODB_URI;
+if (!mongo_uri) {
+    console.error('MongoDB URI missing');
+    process.exit(1);
+}
 // MongoDB Connection
-mongoose.connect('mongodb+srv://bibhabasucvsc:18022004Basu*@cluster0.g0rkp.mongodb.net/Startup', {
+mongoose.connect(mongo_uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -53,9 +59,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     workExperience: {
-        type: Number,
+        type: String,
         required: true,
-        min: 0
     },
     designation: {
         type: String,
