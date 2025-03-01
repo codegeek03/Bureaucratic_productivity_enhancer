@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Layout</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- FullCalendar Dependencies -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Section (20%) -->
+        <div class="left-section">
+            <div class="box logo-box">
+                <img src="placeholder-logo.png" alt="Logo" class="logo">
+            </div>
+            <div class="box">Dashboard</div>
+            <div class="box">Messages</div>
+            <div class="box">Calendar</div>
+            <div class="box">Tasks</div>
+            <div class="box">Settings</div>
+            <div class="box">Profile</div>
+        </div>
+
+        <!-- Center Section (60%) -->
+        <div class="center-section">
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <!-- Chat messages will appear here -->
+                </div>
+                <div class="chat-input">
+                    <textarea placeholder="Type your message here..."></textarea>
+                    <button>Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section (20%) -->
+        <div class="right-section">
+            <div class="calendar-container">
+                <div id="calendar"></div>
+                <!-- Event Modal -->
+                <div id="eventModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Add Event</h3>
+                        <form id="eventForm">
+                            <input type="text" id="eventTitle" placeholder="Event Title" required>
+                            <textarea id="eventDescription" placeholder="Event Description"></textarea>
+                            <input type="datetime-local" id="eventDateTime" required>
+                            <button type="submit" class="add-event-btn">Add Event</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="text-box-container">
+                <h3>Upcoming Events</h3>
+                <div id="upcomingEvents"></div>
+            </div>
+            <div class="todo-container">
+                <h3>To-Do List</h3>
+                <form id="todoForm">
+                    <div class="todo-input-container">
+                        <input type="text" id="todoInput" placeholder="Add new task..." class="todo-input">
+                        <button type="submit" class="add-todo-btn">Add</button>
+                    </div>
+                </form>
+                <ul id="todoList" class="todo-list"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

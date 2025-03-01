@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard with Chatbot and Todo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Section (20%) -->
+        <div class="left-section">
+            <div class="logo-box" style="background-color: #f1f1f1;">
+                <img src="./18.png" alt="Logo" class="logo"  style="width: 100%">
+            </div>
+            <div class="menu-box">Dashboard</div>
+            <div class="menu-box">Analytics</div>
+            <div class="menu-box">Projects</div>
+            <div class="menu-box">Messages</div>
+            <div class="menu-box">Settings</div>
+            <div class="menu-box">Help</div>
+        </div>
+
+        <!-- Middle Section (50%) -->
+        <div class="middle-section">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Chat messages will be added here -->
+                </div>
+                <div class="chat-input-container">
+                    <textarea id="chatInput" placeholder="Type your message here..."></textarea>
+                    <button id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section (30%) -->
+        <div class="right-section">
+            <div class="todo-container">
+                <h2>Todo List</h2>
+                <div class="todo-input-container">
+                    <input type="text" id="todoInput" placeholder="Add a new task...">
+                    <button id="addTodo">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <ul id="todoList" class="todo-list">
+                    <!-- Todo items will be added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
