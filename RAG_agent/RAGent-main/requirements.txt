@@ -1,0 +1,28 @@
+# Core dependencies
+fastapi>=0.104.1
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+pydantic>=2.5.0
+
+# RAG dependencies
+langchain>=0.0.350
+langchain-community>=0.0.10
+langchain-core>=0.1.0
+langchain-text-splitters>=0.0.1
+langchain_chroma>=0.0.1
+chromadb>=0.4.18
+sentence-transformers>=2.2.2
+
+# PDF and document processing
+PyPDF2>=3.0.0
+
+# API clients and utils
+anthropic>=0.7.0
+tavily-python>=0.3.0
+python-dotenv>=1.0.0
+
+# Warning and logging
+warnings>=0.1.0
+
+# HTTP client
+requests>=2.31.0
