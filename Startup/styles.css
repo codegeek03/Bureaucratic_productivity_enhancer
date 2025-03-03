@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f6fa;
+}
+
+/* Left Section Styles */
+.left-section {
+    width: 20%;
+    background-color: #2c3e50;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.logo-box {
+    /* padding: 20px; */
+    background-color: #34495e;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    /* max-width: 100px; */
+    height: auto;
+    border-radius: 10px;
+}
+
+.menu-box {
+    padding: 15px;
+    background-color: #34495e;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-box:hover {
+    background-color: #3498db;
+    transform: translateX(5px);
+}
+
+/* Middle Section Styles */
+.middle-section {
+    width: 50%;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.chat-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 70%;
+}
+
+.user-message {
+    background-color: #3498db;
+    color: white;
+    margin-left: auto;
+    border-radius: 15px 15px 0 15px;
+}
+
+.bot-message {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    margin-right: auto;
+    border-radius: 15px 15px 15px 0;
+}
+
+.chat-input-container {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    background-color: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+}
+
+#chatInput {
+    flex-grow: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 25px;
+    resize: none;
+    height: 50px;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#sendMessage {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#sendMessage:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+/* Right Section Styles */
+.right-section {
+    width: 30%;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.todo-container {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.todo-container h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.todo-input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todoInput {
+    flex-grow: 1;
+    padding: 12px;
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    outline: none;
+}
+
+#addTodo {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2ecc71;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#addTodo:hover {
+    background-color: #27ae60;
+    transform: scale(1.1);
+}
+
+.todo-list {
+    list-style: none;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.todo-text {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+.delete-todo {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-todo:hover {
+    background-color: #c0392b;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}

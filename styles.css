@@ -1,0 +1,427 @@
+/* Reset and Variables */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-yellow: #FFD700;
+    --secondary-yellow: #FFC000;
+    --primary-black: #1a1a1a;
+    --secondary-black: #2d2d2d;
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --accent-gradient: linear-gradient(135deg, var(--primary-yellow), var(--secondary-yellow));
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    background-color: var(--primary-black);
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left Section - 20% */
+.left-section {
+    width: 20%;
+    background: var(--secondary-black);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.user-profile {
+    background: var(--primary-black);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--primary-yellow);
+    margin-bottom: 1rem;
+}
+
+.user-profile .username {
+    color: var(--primary-yellow);
+    font-weight: bold;
+}
+
+.current-time {
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-top: 0.5rem;
+}
+
+.box {
+    background: var(--primary-black);
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.box:hover {
+    border-color: var(--primary-yellow);
+    transform: translateX(5px);
+    background: var(--secondary-black);
+}
+
+.logo-box {
+    height: 80px;
+    background: var(--accent-gradient);
+    margin-bottom: 0.5rem;
+}
+
+/* Center Section - 40% */
+.center-section {
+    width: 40%;
+    padding: 1rem;
+    background: var(--primary-black);
+}
+
+.chat-container {
+    height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+    background: var(--secondary-black);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--primary-yellow);
+}
+
+.chat-messages {
+    flex-grow: 1;
+    background: var(--primary-black);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--primary-black);
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+.chat-input textarea {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--primary-yellow);
+    border-radius: 6px;
+    background: var(--secondary-black);
+    color: var(--text-light);
+    resize: none;
+    height: 45px;
+}
+
+.chat-input button {
+    padding: 0 1.2rem;
+    background: var(--accent-gradient);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.chat-input button:hover {
+    transform: scale(1.05);
+}
+
+/* Right Section - 40% */
+.right-section {
+    width: 40%;
+    background: var(--secondary-black);
+    padding: 1rem;
+    display: grid;
+    grid-template-rows: 300px auto auto;
+    gap: 1rem;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Calendar Styles */
+.calendar-container {
+    background: var(--primary-black);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--primary-yellow);
+    height: 300px;
+    overflow: auto;
+}
+
+#calendar {
+    font-size: 0.8rem;
+    height: 100%;
+}
+
+/* FullCalendar Overrides */
+.fc {
+    height: 100% !important;
+    background: var(--primary-black);
+}
+
+.fc-header-toolbar {
+    padding: 0.5rem !important;
+}
+
+.fc-toolbar-title {
+    font-size: 1rem !important;
+    color: var(--primary-yellow) !important;
+}
+
+.fc-button-primary {
+    background: var(--accent-gradient) !important;
+    border: none !important;
+    color: var(--text-dark) !important;
+    font-weight: bold !important;
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.8rem !important;
+}
+
+.fc-day {
+    background: var(--secondary-black) !important;
+}
+
+.fc-day-today {
+    background: rgba(255, 215, 0, 0.1) !important;
+}
+
+.fc-daygrid-day-number {
+    color: var(--text-light) !important;
+    padding: 0.3rem !important;
+    font-size: 0.8rem !important;
+}
+
+.fc-event {
+    background: var(--primary-yellow) !important;
+    border: none !important;
+    padding: 0.1rem 0.3rem !important;
+    margin: 0.1rem 0 !important;
+}
+
+.fc-event-title {
+    color: var(--text-dark) !important;
+    font-size: 0.7rem !important;
+}
+
+/* Upcoming Events */
+.text-box-container {
+    background: var(--primary-black);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--primary-yellow);
+    overflow-y: auto;
+    height: calc((100vh - 300px - 3rem) / 2);
+}
+
+.text-box-container h3 {
+    color: var(--primary-yellow);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.upcoming-event {
+    background: var(--secondary-black);
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-yellow);
+}
+
+.upcoming-event h4 {
+    color: var(--primary-yellow);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.upcoming-event p {
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+/* Todo List */
+.todo-container {
+    background: var(--primary-black);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--primary-yellow);
+    height: calc((100vh - 300px - 3rem) / 2);
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-container h3 {
+    color: var(--primary-yellow);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.todo-input-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.todo-input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--primary-yellow);
+    border-radius: 6px;
+    background: var(--secondary-black);
+    color: var(--text-light);
+}
+
+.add-todo-btn {
+    padding: 0.5rem 1rem;
+    background: var(--accent-gradient);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.todo-list {
+    list-style: none;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--secondary-black);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-yellow);
+}
+
+.todo-content {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.todo-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-yellow);
+}
+
+.todo-text {
+    font-size: 0.9rem;
+}
+
+.todo-text.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.delete-todo {
+    background: transparent;
+    color: #ff4444;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background: var(--secondary-black);
+    margin: 10% auto;
+    padding: 1.5rem;
+    border: 1px solid var(--primary-yellow);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: var(--box-shadow);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-yellow);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-yellow);
+}
+
+/* Time Display */
+.time-display {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: var(--secondary-black);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--primary-yellow);
+    font-size: 0.8rem;
+    color: var(--primary-yellow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Responsive height adjustments */
+@media screen and (max-height: 800px) {
+    .calendar-container {
+        height: 250px;
+    }
+    
+    .right-section {
+        grid-template-rows: 250px auto auto;
+    }
+    
+    .fc-toolbar-title {
+        font-size: 0.9rem !important;
+    }
+}

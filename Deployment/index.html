@@ -254,40 +254,47 @@
 
   <script type="module">
     import { Clerk } from '@clerk/clerk-js';
-
+  
     const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
     const apiUrl = import.meta.env.VITE_API_URL;
     const clerk = new Clerk(clerkPubKey);
-
+  
     await clerk.load();
-
+  
     const authButtons = document.getElementById('auth-buttons');
     const userButtons = document.getElementById('user-buttons');
     const modal = document.getElementById('user-details-modal');
     const userDetailsForm = document.getElementById('user-details-form');
-
+  
     function showModal() {
       modal.classList.remove('hidden');
     }
-
+  
     function hideModal() {
       modal.classList.add('hidden');
     }
-
+  
     // Add this new function to check if user exists in MongoDB
     async function checkUserExists(clerkUserId) {
       try {
         const response = await fetch(`${apiUrl}/api/users/${clerkUserId}`);
-        return response.ok; // Will return true if user exists, false otherwise
+        if (response.ok) {
+          const data = await response.json();
+          console.log('User exists:', data);
+          return true;
+        } else {
+          console.log('User does not exist');
+          return false;
+        }
       } catch (error) {
         console.error('Error checking user:', error);
         return false;
       }
     }
-
+  
     async function handleFormSubmit(e) {
       e.preventDefault();
-
+  
       const formData = {
         clerkUserId: clerk.user.id,
         name: document.getElementById('name').value,
@@ -296,9 +303,9 @@
         passkey: document.getElementById('passkey').value,
         jobDescription: document.getElementById('jobDescription').value
       };
-
-
-
+  
+      console.log('Form data:', formData);
+  
       try {
         const response = await fetch(`${apiUrl}/api/users`, {
           method: 'POST',
@@ -307,32 +314,35 @@
           },
           body: JSON.stringify(formData)
         });
-
+  
         if (response.ok) {
+          console.log('User details saved successfully');
           hideModal();
           // Redirect to dashboard after successful submission
           window.location.href = '/dashboard';
         } else {
-          throw new Error('Failed to save user details');
+          const errorData = await response.json();
+          console.error('Failed to save user details:', errorData);
+          alert('Failed to save user details. Please try again.');
         }
       } catch (error) {
         console.error('Error:', error);
         alert('Failed to save user details. Please try again.');
       }
     }
-
+  
     async function updateUIBasedOnAuth() {
       if (clerk.user) {
         // User is logged in
         const userExists = await checkUserExists(clerk.user.id);
-
+  
         authButtons.style.display = 'none';
         userButtons.style.display = 'block';
-
+  
         if (!userExists) {
           // Only show modal if user doesn't exist in MongoDB
           showModal();
-
+  
           // Pre-fill form fields if available
           document.getElementById('name').value = `${clerk.user.firstName || ''} ${clerk.user.lastName || ''}`.trim();
           document.getElementById('email').value = clerk.user.emailAddresses[0]?.emailAddress || '';
@@ -348,29 +358,29 @@
         hideModal();
       }
     }
-
+  
     // Initial UI update
     updateUIBasedOnAuth();
-
+  
     // Event listeners
     userDetailsForm.addEventListener('submit', handleFormSubmit);
-
+  
     document.getElementById('sign-up-trigger').addEventListener('click', (e) => {
       e.preventDefault();
       clerk.openSignUp();
     });
-
+  
     document.getElementById('sign-in-trigger').addEventListener('click', (e) => {
       e.preventDefault();
       clerk.openSignIn();
     });
-
+  
     document.getElementById('sign-out-button').addEventListener('click', async (e) => {
       e.preventDefault();
       await clerk.signOut();
       updateUIBasedOnAuth();
     });
-
+  
     // Listen for auth state changes
     clerk.addListener(({ user }) => {
       updateUIBasedOnAuth();

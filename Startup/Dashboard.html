@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & Calendar Dashboard</title>
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <!-- Evo Calendar -->
+    <link href="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.3/evo-calendar/css/evo-calendar.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.3/evo-calendar/js/evo-calendar.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Profile Section (20%) -->
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="profile-image">
+                    <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=bibhabasuiitkgp" alt="Profile Picture">
+                </div>
+                <h2>Bibhabasu</h2>
+                <p class="title">Software Developer</p>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-box">
+                    <i class="fas fa-envelope"></i>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p>bibhabasu@example.com</p>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="info-content">
+                        <h4>Phone Number</h4>
+                        <p>1234567789</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-clock"></i>
+                    <div class="info-content">
+                        <h4>Work experience</h4>
+                        <p>6 years</p>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Calendar Section (80%) -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2>My Calendar</h2>
+                <div class="calendar-actions">
+                    <button id="addEventBtn">
+                        <i class="fas fa-plus"></i> Add Event
+                    </button>
+                    <a href="/Startup/tools.html" class="tools-btn">
+                        <i class="fas fa-tools"></i> Tools
+                    </a>
+                </div>
+            </div>
+            <div id="calendar" style="scale:0.9"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+
+    <!-- Event Modal -->
+<div id="eventModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Add New Event</h3>
+        <form id="eventForm">
+            <div class="form-group">
+                <label for="eventName">Event Name*</label>
+                <input type="text" id="eventName" required>
+            </div>
+            <div class="form-group">
+                <label for="eventDate">Date*</label>
+                <input type="date" id="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label for="eventEndDate">End Date (Optional)</label>
+                <input type="date" id="eventEndDate">
+            </div>
+            <div class="form-group">
+                <label for="eventDescription">Description</label>
+                <textarea id="eventDescription" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="eventType">Event Type</label>
+                <select id="eventType">
+                    <option value="event">Regular Event</option>
+                    <option value="holiday">Holiday</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="meeting">Meeting</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="eventColor">Event Color</label>
+                <input type="color" id="eventColor" value="#3498db">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Save Event</button>
+                <button type="button" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
